@@ -143,7 +143,7 @@ class _CounterPageState extends State<CounterPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // 1分間タイマーのブロック
+                // 1分間タイマー
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

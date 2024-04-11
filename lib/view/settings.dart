@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import '../localization/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:waiting_time/viewmodel/setting_model.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -11,38 +14,57 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   String _selectedLanguage = '日本語';
 
-  var Provider;
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguage();
+  }
+
+  _loadLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLanguage =
+          prefs.getString('language') == 'ja' ? '日本語' : 'English';
+    });
+  }
+
+  _saveLanguage(String language) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('language', language);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(AppLocalizations.of(context)?.translate('settings') ?? '設定'),
+        title: Text(AppLocalizations.of(context)!.settings),
       ),
       body: Center(
-        child: DropdownButton<String>(
-          value: _selectedLanguage,
-          onChanged: (String? newValue) {
-            // UIを更新するために状態を設定
-            setState(() {
-              _selectedLanguage = newValue!;
-            });
-            // 言語設定を非同期で更新
-            Provider.of<SettingModel>(context, listen: false)
-                .setSelectedLanguage(newValue)
-                .then((_) {
-              // 必要に応じて非同期処理の完了後に何かをする
-            }).catchError((error) {
-              // エラー処理
-              print("言語設定の更新中にエラーが発生しました: $error");
-            });
-          },
-          items: <DropdownMenuItem<String>>[], // 空のリストを設定
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(AppLocalizations.of(context)!.language_settings),
+            DropdownButton<String>(
+              value: _selectedLanguage,
+              onChanged: (String? newValue) async {
+                setState(() {
+                  _selectedLanguage = newValue!;
+                });
+                await _saveLanguage(newValue == '日本語' ? 'ja' : 'en');
+                Provider.of<SettingModel>(context, listen: false).setLocale(
+                    newValue == '日本語' ? Locale('ja', '') : Locale('en', ''));
+              },
+              items: <String>['日本語', 'English']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
-mixin SettingModel {}

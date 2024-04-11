@@ -2,55 +2,69 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'view/settings.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'viewmodel/setting_model.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<Locale> _fetchLocale() async {
+  final prefs = await SharedPreferences.getInstance();
+  final languageCode =
+      prefs.getString('language') ?? 'ja'; // 'ja' をデフォルト言語として設定
+  return Locale(languageCode, '');
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final locale = await _fetchLocale();
+  runApp(
+    ChangeNotifierProvider<SettingModel>(
+      create: (context) => SettingModel(),
+      child: Consumer<SettingModel>(
+        builder: (context, model, child) {
+          return MyApp(locale: model.currentLocale);
+        },
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({required this.locale});
+
+  final Locale locale;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '待ち時間予想アプリ',
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const CounterPage(),
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en', ''), // English
-        const Locale('ja', ''), // Japanese
-      ],
+    return Consumer<SettingModel>(
+      builder: (context, settings, child) {
+        return MaterialApp(
+          locale: settings.currentLocale, // 現在のロケールを使用
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en', ''),
+            const Locale('ja', ''),
+          ],
+          localeResolutionCallback: (deviceLocale, supportedLocales) {
+            if (deviceLocale != null &&
+                supportedLocales.contains(deviceLocale)) {
+              return deviceLocale;
+            }
+            return Locale('en', '');
+          },
+          theme: ThemeData(
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: const CounterPage(),
+        );
+      },
     );
   }
-}
-
-class AppLocalizations {
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
-}
-
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
-  const _AppLocalizationsDelegate();
-
-  @override
-  bool isSupported(Locale locale) => ['en', 'ja'].contains(locale.languageCode);
-
-  @override
-  Future<AppLocalizations> load(Locale locale) async {
-    return AppLocalizations();
-  }
-
-  @override
-  bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 class CounterPage extends StatefulWidget {
@@ -61,44 +75,44 @@ class CounterPage extends StatefulWidget {
 }
 
 class _CounterPageState extends State<CounterPage> {
-  int _counterA = 0;
-  int _counterB = 0;
+  int _counterFront = 0;
+  int _counterBehind = 0;
   int _timer = 60;
   Timer? _countdownTimer;
 
-  void _incrementCounterA() {
+  void _incrementCounterFront() {
     setState(() {
-      _counterA++;
+      _counterFront++;
     });
   }
 
-  void _decrementCounterA() {
+  void _decrementCounterFront() {
     setState(() {
-      if (_counterA > 0) _counterA--;
+      if (_counterFront > 0) _counterFront--;
     });
   }
 
-  void _resetCounterA() {
+  void _resetCounterFront() {
     setState(() {
-      _counterA = 0;
+      _counterFront = 0;
     });
   }
 
-  void _incrementCounterB() {
+  void _incrementCounterBehind() {
     setState(() {
-      _counterB++;
+      _counterBehind++;
     });
   }
 
-  void _decrementCounterB() {
+  void _decrementCounterBehind() {
     setState(() {
-      if (_counterB > 0) _counterB--;
+      if (_counterBehind > 0) _counterBehind--;
     });
   }
 
-  void _resetCounterB() {
+  void _resetCounterBehind() {
     setState(() {
-      _counterB = 0;
+      _counterBehind = 0;
     });
   }
 
@@ -129,7 +143,7 @@ class _CounterPageState extends State<CounterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('待ち時間予想(リトルの法則)'),
+        title: Text(AppLocalizations.of(context)!.main_title),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),
@@ -145,40 +159,42 @@ class _CounterPageState extends State<CounterPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('前に並んでいる行列の人数 ${_counterA}人'),
+            Text(
+                '${AppLocalizations.of(context)!.line_in_front_of}: ${_counterFront}'),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.remove),
-                  onPressed: _decrementCounterA,
+                  onPressed: _decrementCounterFront,
                 ),
                 IconButton(
                   icon: const Icon(Icons.add),
-                  onPressed: _incrementCounterA,
+                  onPressed: _incrementCounterFront,
                 ),
                 IconButton(
                   icon: const Icon(Icons.replay), // リセットマーク
-                  onPressed: _resetCounterA,
+                  onPressed: _resetCounterFront,
                 ),
               ],
             ),
             const SizedBox(height: 30),
-            Text('1分間で後ろに並んだ人数 ${_counterB}人'),
+            Text(
+                '${AppLocalizations.of(context)!.line_behind}: ${_counterBehind}'),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.remove),
-                  onPressed: _decrementCounterB,
+                  onPressed: _decrementCounterBehind,
                 ),
                 IconButton(
                   icon: const Icon(Icons.add),
-                  onPressed: _incrementCounterB,
+                  onPressed: _incrementCounterBehind,
                 ),
                 IconButton(
                   icon: const Icon(Icons.replay), // リセットマーク
-                  onPressed: _resetCounterB,
+                  onPressed: _resetCounterBehind,
                 ),
               ],
             ),
@@ -186,11 +202,11 @@ class _CounterPageState extends State<CounterPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // 1分間タイマー
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('1分間タイマー $_timer s'),
+                    Text(
+                        '${AppLocalizations.of(context)!.minute_timer} $_timer ${AppLocalizations.of(context)!.seconds}'),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -226,7 +242,7 @@ class _CounterPageState extends State<CounterPage> {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('計算'),
+                    Text(AppLocalizations.of(context)!.calculate),
                     IconButton(
                       icon: const Icon(Icons.calculate),
                       onPressed: () {
@@ -236,15 +252,18 @@ class _CounterPageState extends State<CounterPage> {
                           builder: (BuildContext context) {
                             // 計算方式
                             double result = 0;
-                            if (_counterB != 0) {
-                              result = _counterA / _counterB;
+                            if (_counterBehind != 0) {
+                              result = _counterFront / _counterBehind;
                             }
                             return AlertDialog(
-                              title: const Text('予想待ち時間'),
-                              content: Text('$result分です'),
+                              title: Text(AppLocalizations.of(context)!
+                                  .estimated_waiting_time),
+                              content: Text(
+                                  '$result ${AppLocalizations.of(context)!.minute}'),
                               actions: <Widget>[
                                 TextButton(
-                                  child: const Text('閉じる'),
+                                  child:
+                                      Text(AppLocalizations.of(context)!.close),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },

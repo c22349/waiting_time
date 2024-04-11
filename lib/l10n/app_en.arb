@@ -1,0 +1,51 @@
+{
+  "@@locale": "en",
+  "main_title": "Waiting time forecast (Little's Law)",
+      "@main_title": {
+        "description": "title label"
+      },
+  "line_in_front_of": "Number of people in line in front of you",
+      "@line_in_front_of": {
+        "description": "line in front label"
+      },
+  "line_behind": "Number of people lined up behind you in 1 minute",
+      "@line_behind": {
+        "description": "lined up behind you label"
+      },
+  "minute_timer": "1 minute timer",
+      "@minute_timer": {
+        "description": "1 minute timer label"
+      },
+  "calculate": "calculate",
+      "@calculate": {
+        "description": "calculate label"
+      },
+  "estimated_waiting_time": "Estimated waiting time",
+      "@estimated_waiting_time": {
+        "description": "Estimated waiting time label"
+      },
+  "minute": "minute",
+      "@minute": {
+        "description": "minute label"
+      },
+  "seconds": "seconds",
+      "@minute": {
+        "description": "seconds label"
+      },
+  "close": "close",
+      "@close": {
+        "description": "close label"
+      },
+  "settings": "Settings",
+      "@settings": {
+        "description": "settings label"
+      },
+  "language_settings": "Language settings",
+      "@settings": {
+        "description": "Language settings label"
+      },      
+  "error_updating_language_settings": "An error occurred while updating language settings",
+    "@error_updating_language_settings": {
+      "description": "Error message displayed when updating the language settings fail"
+    }
+}

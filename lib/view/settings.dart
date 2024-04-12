@@ -12,7 +12,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  String _selectedLanguage = '日本語';
+  String _selectedLanguage = 'ja';
 
   @override
   void initState() {
@@ -23,14 +23,12 @@ class _SettingPageState extends State<SettingPage> {
   _loadLanguage() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _selectedLanguage =
-          prefs.getString('language') == 'ja' ? '日本語' : 'English';
+      _selectedLanguage = prefs.getString('language') ?? 'ja';
     });
   }
 
   _saveLanguage(String language) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('language', language);
+    Provider.of<SettingModel>(context, listen: false).updateLanguage(language);
   }
 
   @override
@@ -50,14 +48,14 @@ class _SettingPageState extends State<SettingPage> {
                 setState(() {
                   _selectedLanguage = newValue!;
                 });
-                await _saveLanguage(newValue == '日本語' ? 'ja' : 'en');
+                await _saveLanguage(newValue!);
                 Provider.of<SettingModel>(context, listen: false).setLocale(
-                    newValue == '日本語' ? Locale('ja', '') : Locale('en', ''));
+                    newValue == 'ja' ? Locale('ja', '') : Locale('en', ''));
               },
               items: <String>['日本語', 'English']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
-                  value: value,
+                  value: value == '日本語' ? 'ja' : 'en',
                   child: Text(value),
                 );
               }).toList(),

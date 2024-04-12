@@ -9,17 +9,17 @@ import 'viewmodel/setting_model.dart';
 
 Future<Locale> _fetchLocale() async {
   final prefs = await SharedPreferences.getInstance();
-  final languageCode =
-      prefs.getString('language') ?? 'ja'; // 'ja' をデフォルト言語として設定
+  final languageCode = prefs.getString('language') ?? 'ja';
   return Locale(languageCode, '');
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final locale = await _fetchLocale();
+  final settingModel = SettingModel();
+  await settingModel.loadLocale(); // 言語設定を読み込む
   runApp(
     ChangeNotifierProvider<SettingModel>(
-      create: (context) => SettingModel(),
+      create: (context) => settingModel,
       child: Consumer<SettingModel>(
         builder: (context, model, child) {
           return MyApp(locale: model.currentLocale);

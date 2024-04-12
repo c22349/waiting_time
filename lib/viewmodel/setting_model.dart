@@ -1,11 +1,12 @@
 import "package:flutter/material.dart";
 import "package:shared_preferences/shared_preferences.dart";
+import 'dart:io';
 
 class SettingModel with ChangeNotifier {
   // 初期値
   bool _startSettingPage = true;
   bool get startSettingPage => _startSettingPage;
-  Locale _currentLocale = Locale('ja', ''); // 初期値を日本語に設定
+  Locale _currentLocale = Locale('ja', '');
   Locale get currentLocale => _currentLocale;
 
   // SharedPreferencesへの設定値の保存と通知を行う非同期メソッド
@@ -26,13 +27,13 @@ class SettingModel with ChangeNotifier {
 
   Future<void> setSelectedLanguage(String languageCode) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("selectedLanguage", languageCode);
+    await prefs.setString("language", languageCode);
     notifyListeners();
   }
 
   Future<String> getSelectedLanguage() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("selectedLanguage") ?? "ja";
+    return prefs.getString("language") ?? "ja";
   }
 
   Future<void> updateLanguage(String languageCode) async {
@@ -51,6 +52,21 @@ class SettingModel with ChangeNotifier {
   }
 
   void restartApp() {
+    notifyListeners();
+  }
+
+  Locale getDeviceLocale() {
+    return Locale(Platform.localeName.split('_')[0]);
+  }
+
+  // アプリ起動時に呼び出すメソッド
+  Future<void> loadLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? savedLanguageCode = prefs.getString('language');
+    Locale deviceLocale = getDeviceLocale();
+    String defaultLanguageCode =
+        deviceLocale.languageCode == 'ja' ? 'ja' : 'en';
+    _currentLocale = Locale(savedLanguageCode ?? defaultLanguageCode, '');
     notifyListeners();
   }
 }

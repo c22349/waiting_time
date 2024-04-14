@@ -133,6 +133,31 @@ class _CounterPageState extends State<CounterPage> {
     });
   }
 
+  void _toggleTimer() {
+    if (_timer == 0) {
+      setState(() {
+        _timer = 60; // タイマーが0秒の場合、60秒にリセット
+      });
+    }
+    if (_countdownTimer == null) {
+      _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        setState(() {
+          if (_timer > 0) {
+            _timer--;
+          } else {
+            _countdownTimer?.cancel();
+            _countdownTimer = null;
+          }
+        });
+      });
+    } else {
+      _countdownTimer?.cancel();
+      setState(() {
+        _countdownTimer = null;
+      });
+    }
+  }
+
   @override
   void dispose() {
     _countdownTimer?.cancel();
@@ -213,17 +238,8 @@ class _CounterPageState extends State<CounterPage> {
                         IconButton(
                           icon: Icon(_countdownTimer == null
                               ? Icons.play_arrow
-                              : Icons.stop),
-                          onPressed: () {
-                            if (_countdownTimer == null) {
-                              _startTimer();
-                            } else {
-                              _countdownTimer?.cancel();
-                              setState(() {
-                                _countdownTimer = null;
-                              });
-                            }
-                          },
+                              : Icons.pause),
+                          onPressed: _toggleTimer,
                         ),
                         IconButton(
                           icon: const Icon(Icons.replay),

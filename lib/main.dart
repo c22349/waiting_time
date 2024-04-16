@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'view/settings.dart';
+import 'viewmodel/setting_model.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
-import 'viewmodel/setting_model.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/services.dart';
 
 Future<Locale> _fetchLocale() async {
   final prefs = await SharedPreferences.getInstance();
@@ -15,18 +17,23 @@ Future<Locale> _fetchLocale() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final settingModel = SettingModel();
-  await settingModel.loadLocale(); // 言語設定を読み込む
-  runApp(
-    ChangeNotifierProvider<SettingModel>(
-      create: (context) => settingModel,
-      child: Consumer<SettingModel>(
-        builder: (context, model, child) {
-          return MyApp(locale: model.currentLocale);
-        },
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) async {
+    final settingModel = SettingModel();
+    await settingModel.loadLocale(); // 言語設定を読み込む
+    runApp(
+      ChangeNotifierProvider<SettingModel>(
+        create: (context) => settingModel,
+        child: Consumer<SettingModel>(
+          builder: (context, model, child) {
+            return MyApp(locale: model.currentLocale);
+          },
+        ),
       ),
-    ),
-  );
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -79,6 +86,7 @@ class _CounterPageState extends State<CounterPage> {
   int _counterBehind = 0;
   int _timer = 60;
   Timer? _countdownTimer;
+  static const double iconSize = 36;
 
   void _incrementCounterFront() {
     setState(() {
@@ -166,9 +174,22 @@ class _CounterPageState extends State<CounterPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 現在のロケールを取得
+    Locale locale = Localizations.localeOf(context);
+    // ロケールに基づいてフォントサイズを設定
+    double titleFontSize = locale.languageCode == 'ja' ? 22.0 : 20.0;
+    double bodyFontSize = locale.languageCode == 'ja' ? 20.0 : 16.0;
+    double calculationFontSize = locale.languageCode == 'ja' ? 20.0 : 18.0;
+    double SupplementFontSize = locale.languageCode == 'ja' ? 16.0 : 16.0;
+    double closeFontSize = locale.languageCode == 'ja' ? 20.0 : 18.0;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.main_title),
+        title: Text(
+          AppLocalizations.of(context)!.main_title,
+          style: TextStyle(fontSize: titleFontSize),
+        ),
+        centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),
@@ -180,123 +201,278 @@ class _CounterPageState extends State<CounterPage> {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-                '${AppLocalizations.of(context)!.line_in_front_of}: ${_counterFront}'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.remove),
-                  onPressed: _decrementCounterFront,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: _incrementCounterFront,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.replay), // リセットマーク
-                  onPressed: _resetCounterFront,
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            Text(
-                '${AppLocalizations.of(context)!.line_behind}: ${_counterBehind}'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.remove),
-                  onPressed: _decrementCounterBehind,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: _incrementCounterBehind,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.replay), // リセットマーク
-                  onPressed: _resetCounterBehind,
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                        '${AppLocalizations.of(context)!.minute_timer} $_timer ${AppLocalizations.of(context)!.seconds}'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: Icon(_countdownTimer == null
-                              ? Icons.play_arrow
-                              : Icons.pause),
-                          onPressed: _toggleTimer,
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start, // 中央揃えから開始位置揃えに変更
+                children: <Widget>[
+                  SizedBox(height: 60), // 上部のスペースを調整
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: DefaultTextStyle.of(context).style,
+                      children: <InlineSpan>[
+                        TextSpan(
+                          text:
+                              '${AppLocalizations.of(context)!.line_in_front_of}\n',
+                          style: TextStyle(fontSize: bodyFontSize),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.replay),
-                          onPressed: () {
-                            _countdownTimer?.cancel();
-                            setState(() {
-                              _timer = 60;
-                              _countdownTimer = null;
-                            });
-                          },
+                        WidgetSpan(child: const SizedBox(height: 46)),
+                        TextSpan(
+                          text: '$_counterFront',
+                          style: TextStyle(fontSize: 34.0),
                         ),
                       ],
                     ),
-                  ],
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(AppLocalizations.of(context)!.calculate),
-                    IconButton(
-                      icon: const Icon(Icons.calculate),
-                      onPressed: () {
-                        // 計算結果を出力
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            // 計算方式
-                            double result = 0;
-                            if (_counterBehind != 0) {
-                              result = _counterFront / _counterBehind;
-                            }
-                            return AlertDialog(
-                              title: Text(AppLocalizations.of(context)!
-                                  .estimated_waiting_time),
-                              content: Text(
-                                  '$result ${AppLocalizations.of(context)!.minute}'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child:
-                                      Text(AppLocalizations.of(context)!.close),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.remove, size: iconSize),
+                        onPressed: _decrementCounterFront,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add, size: iconSize),
+                        onPressed: _incrementCounterFront,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.replay, size: iconSize),
+                        onPressed: _resetCounterFront,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: DefaultTextStyle.of(context).style,
+                      children: <InlineSpan>[
+                        TextSpan(
+                          text:
+                              '${AppLocalizations.of(context)!.line_behind}\n',
+                          style: TextStyle(fontSize: bodyFontSize),
+                        ),
+                        WidgetSpan(child: const SizedBox(height: 46)),
+                        TextSpan(
+                          text: '$_counterBehind',
+                          style: TextStyle(fontSize: 34.0),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.remove, size: iconSize),
+                        onPressed: _decrementCounterBehind,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add, size: iconSize),
+                        onPressed: _incrementCounterBehind,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.replay, size: iconSize),
+                        onPressed: _resetCounterBehind,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text:
+                                      '${AppLocalizations.of(context)!.minute_timer} \n',
+                                  style: TextStyle(fontSize: bodyFontSize),
+                                ),
+                                WidgetSpan(
+                                  child: SizedBox(height: 60),
+                                ),
+                                WidgetSpan(
+                                  child: Container(
+                                    width: 50,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          '$_timer', // タイマーの値
+                                          style: TextStyle(
+                                              fontSize: 36), // $_timerのフォントサイズ
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: Transform.translate(
+                                    offset: Offset(0, -10),
+                                    child: Container(
+                                      width: 30,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            ' ${AppLocalizations.of(context)!.heading_seconds}',
+                                            style: TextStyle(
+                                                fontSize: bodyFontSize),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                    _countdownTimer == null
+                                        ? Icons.play_arrow
+                                        : Icons.pause,
+                                    size: iconSize * 1.2),
+                                onPressed: _toggleTimer,
+                              ),
+                              SizedBox(width: 6),
+                              IconButton(
+                                icon: const Icon(Icons.replay,
+                                    size: iconSize * 1.2),
+                                onPressed: () {
+                                  _countdownTimer?.cancel();
+                                  setState(() {
+                                    _timer = 60;
+                                    _countdownTimer = null;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '${AppLocalizations.of(context)!.calculate}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: bodyFontSize),
+                          ),
+                          SizedBox(height: 32),
+                          IconButton(
+                            icon: Icon(FontAwesomeIcons.calculator,
+                                size: iconSize * 1.6),
+                            onPressed: () {
+                              // 計算結果を出力
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  // 計算方式
+                                  double result = 0;
+                                  if (_counterBehind != 0) {
+                                    result = _counterFront / _counterBehind;
+                                  }
+                                  int minutes = result.floor();
+                                  int seconds =
+                                      ((result - minutes) * 60).round();
+                                  // 30秒単位に切り上げる処理
+                                  if (seconds > 0 && seconds < 30) {
+                                    seconds = 30;
+                                  } else if (seconds > 30) {
+                                    seconds = 0;
+                                    minutes += 1;
+                                  }
+                                  return AlertDialog(
+                                    title: Text(
+                                      AppLocalizations.of(context)!
+                                          .estimated_waiting_time,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    content: RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: '${minutes}',
+                                            style: TextStyle(
+                                                fontSize: 30.0,
+                                                color: Colors.black),
+                                          ),
+                                          TextSpan(
+                                            text: AppLocalizations.of(context)!
+                                                .minute,
+                                            style: TextStyle(
+                                                fontSize: calculationFontSize,
+                                                color: Colors.black),
+                                          ),
+                                          if (seconds > 0) ...[
+                                            TextSpan(
+                                              text: '${seconds}',
+                                              style: TextStyle(
+                                                  fontSize: 30.0,
+                                                  color: Colors.black),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  AppLocalizations.of(context)!
+                                                      .seconds,
+                                              style: TextStyle(
+                                                  fontSize: calculationFontSize,
+                                                  color: Colors.black),
+                                            ),
+                                          ],
+                                          TextSpan(
+                                            text:
+                                                '\n\n\n${AppLocalizations.of(context)!.calculation_supplement}',
+                                            style: TextStyle(
+                                                fontSize: SupplementFontSize,
+                                                color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text(
+                                          AppLocalizations.of(context)!.close,
+                                          style: TextStyle(
+                                              fontSize: closeFontSize),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 30),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

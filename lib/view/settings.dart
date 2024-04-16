@@ -33,34 +33,55 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 現在のロケールを取得
+    Locale locale = Localizations.localeOf(context);
+    // ロケールに基づいてフォントサイズを設定
+    double settingsTitleFontSize = locale.languageCode == 'ja' ? 22.0 : 20.0;
+    double settingsFontSize = locale.languageCode == 'ja' ? 18.0 : 16.0;
+    double settingsLanguageFontSize = locale.languageCode == 'ja' ? 20.0 : 18.0;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settings),
+        title: Text(
+          AppLocalizations.of(context)!.settings,
+          style: TextStyle(fontSize: settingsTitleFontSize),
+        ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(AppLocalizations.of(context)!.language_settings),
-            DropdownButton<String>(
-              value: _selectedLanguage,
-              onChanged: (String? newValue) async {
-                setState(() {
-                  _selectedLanguage = newValue!;
-                });
-                await _saveLanguage(newValue!);
-                Provider.of<SettingModel>(context, listen: false).setLocale(
-                    newValue == 'ja' ? Locale('ja', '') : Locale('en', ''));
-              },
-              items: <String>['日本語', 'English']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value == '日本語' ? 'ja' : 'en',
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          ],
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 60.0), // 上部からのスペースを調整
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                AppLocalizations.of(context)!.language_settings,
+                style: TextStyle(fontSize: settingsFontSize),
+              ),
+              SizedBox(width: 20), // テキストとドロップダウンの間のスペース
+              DropdownButton<String>(
+                value: _selectedLanguage,
+                onChanged: (String? newValue) async {
+                  setState(() {
+                    _selectedLanguage = newValue!;
+                  });
+                  await _saveLanguage(newValue!);
+                  Provider.of<SettingModel>(context, listen: false).setLocale(
+                      newValue == 'ja' ? Locale('ja', '') : Locale('en', ''));
+                },
+                items: <String>['日本語', 'English']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value == '日本語' ? 'ja' : 'en',
+                    child: Text(
+                      value,
+                      style: TextStyle(fontSize: settingsLanguageFontSize),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
         ),
       ),
     );

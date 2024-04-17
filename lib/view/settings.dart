@@ -46,6 +46,7 @@ class _SettingPageState extends State<SettingPage> {
           AppLocalizations.of(context)!.settings,
           style: TextStyle(fontSize: settingsTitleFontSize),
         ),
+        centerTitle: true,
       ),
       body: Align(
         alignment: Alignment.topCenter,

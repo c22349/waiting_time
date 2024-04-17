@@ -36,7 +36,7 @@
       "@seconds": {
         "description": "seconds label"
       },
-  "calculation_supplement": "Simplified calculations using Little's Law",
+  "calculation_supplement": "Simplified calculations using\nLittle's Law",
     "@calculation_supplement": {
       "description": "Calculation Supplement"
     },

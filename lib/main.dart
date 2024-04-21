@@ -383,10 +383,35 @@ class _CounterPageState extends State<CounterPage> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  // 計算方式
                                   double result = 0;
                                   if (_counterBehind != 0) {
                                     result = _counterFront / _counterBehind;
+                                  } else {
+                                    // line_behindが0の場合、計算不可と表示
+                                    return AlertDialog(
+                                      title: Text(
+                                        AppLocalizations.of(context)!
+                                            .estimated_waiting_time,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      content: Text(
+                                        AppLocalizations.of(context)!
+                                            .incomputable,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 20.0),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text(
+                                            AppLocalizations.of(context)!.close,
+                                            style: TextStyle(fontSize: 20.0),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
                                   }
                                   int minutes = result.floor();
                                   int seconds =

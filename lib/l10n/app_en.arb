@@ -35,7 +35,11 @@
   "seconds": "seconds",
       "@seconds": {
         "description": "seconds label"
-      },
+      },    
+  "incomputable": "Incomputable",
+    "@incomputable": {
+      "description": "Incomputable"
+    },
   "calculation_supplement": "Simplified calculations using\nLittle's Law",
     "@calculation_supplement": {
       "description": "Calculation Supplement"
@@ -51,9 +55,5 @@
   "language_settings": "Language settings",
       "@language_settings": {
         "description": "Language settings label"
-      },      
-  "error_updating_language_settings": "An error occurred while updating language settings",
-    "@error_updating_language_settings": {
-      "description": "Error message displayed when updating the language settings fail"
-    }
+      }
 }

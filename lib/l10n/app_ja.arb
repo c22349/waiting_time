@@ -9,9 +9,9 @@
   "estimated_waiting_time": "予想待ち時間",
   "minute": "分",
   "seconds": "秒",
+  "incomputable": "計算不可",
   "calculation_supplement": "リトルの法則での簡易的な計算",
   "close": "閉じる",
   "settings": "設定",
-  "language_settings": "言語設定",
-  "error_updating_language_settings": "言語設定の更新中にエラーが発生しました"
+  "language_settings": "言語設定"
 }

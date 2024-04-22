@@ -42,6 +42,10 @@ class _SettingPageState extends State<SettingPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios), // 戻るボタンの統一
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Text(
           AppLocalizations.of(context)!.settings,
           style: TextStyle(fontSize: settingsTitleFontSize),

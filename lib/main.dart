@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/services.dart';
+import 'package:vibration/vibration.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
 const double iconSize = 36;
 const double counterNumbersSize = 52;
@@ -142,8 +144,10 @@ class _CounterPageState extends State<CounterPage> {
         if (_timer > 0) {
           _timer--;
         } else {
-          _countdownTimer?.cancel();
           // タイマーが0になった時の処理
+          _countdownTimer?.cancel();
+          Vibration.vibrate();
+          FlutterRingtonePlayer.playAlarm();
         }
       });
     });
@@ -163,6 +167,8 @@ class _CounterPageState extends State<CounterPage> {
           } else {
             _countdownTimer?.cancel();
             _countdownTimer = null;
+            Vibration.vibrate();
+            FlutterRingtonePlayer.playAlarm();
           }
         });
       });

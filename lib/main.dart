@@ -14,6 +14,8 @@ import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 const double iconSize = 36;
 const double counterNumbersSize = 52;
 const double timerNumbersSize = 36;
+const double resultNumbersSize = 44;
+const double noResultFontSize = 32;
 const buttonColor = Color(0xFF5C5862);
 
 Future<Locale> _fetchLocale() async {
@@ -569,7 +571,8 @@ class _CounterPageState extends State<CounterPage> {
                                             AppLocalizations.of(context)!
                                                 .incomputable,
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(fontSize: 20.0),
+                                            style: TextStyle(
+                                                fontSize: noResultFontSize),
                                           ),
                                           actions: <Widget>[
                                             TextButton(
@@ -609,7 +612,7 @@ class _CounterPageState extends State<CounterPage> {
                                               TextSpan(
                                                 text: '${minutes}',
                                                 style: TextStyle(
-                                                    fontSize: 30.0,
+                                                    fontSize: resultNumbersSize,
                                                     color: Colors.black),
                                               ),
                                               TextSpan(
@@ -625,7 +628,8 @@ class _CounterPageState extends State<CounterPage> {
                                                 TextSpan(
                                                   text: '${seconds}',
                                                   style: TextStyle(
-                                                      fontSize: 30.0,
+                                                      fontSize:
+                                                          resultNumbersSize,
                                                       color: Colors.black),
                                                 ),
                                                 TextSpan(

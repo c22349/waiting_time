@@ -8,8 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/services.dart';
+import 'package:vibration/vibration.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
 const double iconSize = 36;
+const double counterNumbersSize = 52;
+const double timerNumbersSize = 36;
+const double resultNumbersSize = 44;
+const double noResultFontSize = 32;
 const buttonColor = Color(0xFF5C5862);
 
 Future<Locale> _fetchLocale() async {
@@ -140,8 +146,10 @@ class _CounterPageState extends State<CounterPage> {
         if (_timer > 0) {
           _timer--;
         } else {
-          _countdownTimer?.cancel();
           // タイマーが0になった時の処理
+          _countdownTimer?.cancel();
+          Vibration.vibrate();
+          FlutterRingtonePlayer.playAlarm();
         }
       });
     });
@@ -161,6 +169,8 @@ class _CounterPageState extends State<CounterPage> {
           } else {
             _countdownTimer?.cancel();
             _countdownTimer = null;
+            Vibration.vibrate();
+            FlutterRingtonePlayer.playAlarm();
           }
         });
       });
@@ -217,7 +227,7 @@ class _CounterPageState extends State<CounterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: 20), // 上部のスペースを調整
+                  SizedBox(height: 10), // 上部のスペースを調整
                   Container(
                     width: MediaQuery.of(context).size.width * 0.96,
                     padding: EdgeInsets.all(10.0), // 内側の余白
@@ -234,16 +244,49 @@ class _CounterPageState extends State<CounterPage> {
                             children: <InlineSpan>[
                               TextSpan(
                                 text:
-                                    '${AppLocalizations.of(context)!.line_in_front_of}\n',
+                                    '${AppLocalizations.of(context)!.line_in_front_of}',
                                 style: TextStyle(fontSize: bodyFontSize),
-                              ),
-                              WidgetSpan(child: const SizedBox(height: 46)),
-                              TextSpan(
-                                text: '$_counterFront',
-                                style: TextStyle(fontSize: 34.0),
                               ),
                             ],
                           ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            IconButton(
+                              icon: Container(
+                                width: iconSize * 2,
+                                height: iconSize,
+                                child: Icon(Icons.replay, size: iconSize),
+                              ),
+                              onPressed: _resetCounterFront,
+                            ),
+                            Container(
+                              width: iconSize * 2,
+                              height: iconSize * 2,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  OverflowBox(
+                                    minWidth: 0.0,
+                                    maxWidth: double.infinity,
+                                    minHeight: 0.0,
+                                    maxHeight: double.infinity,
+                                    child: Text(
+                                      '$_counterFront',
+                                      style: TextStyle(
+                                          fontSize: counterNumbersSize,
+                                          fontFeatures: [
+                                            FontFeature.tabularFigures()
+                                          ]),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                                width: iconSize * 2, height: iconSize),
+                          ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -262,6 +305,8 @@ class _CounterPageState extends State<CounterPage> {
                               ),
                               onPressed: _decrementCounterFront,
                             ),
+                            const SizedBox(
+                                width: iconSize * 2, height: iconSize),
                             IconButton(
                               icon: Container(
                                 width: iconSize * 2,
@@ -276,14 +321,6 @@ class _CounterPageState extends State<CounterPage> {
                                     size: iconSize, color: Colors.white),
                               ),
                               onPressed: _incrementCounterFront,
-                            ),
-                            IconButton(
-                              icon: Container(
-                                width: iconSize * 2,
-                                height: iconSize,
-                                child: Icon(Icons.replay, size: iconSize),
-                              ),
-                              onPressed: _resetCounterFront,
                             ),
                           ],
                         ),
@@ -307,16 +344,49 @@ class _CounterPageState extends State<CounterPage> {
                             children: <InlineSpan>[
                               TextSpan(
                                 text:
-                                    '${AppLocalizations.of(context)!.line_behind}\n',
+                                    '${AppLocalizations.of(context)!.line_behind}',
                                 style: TextStyle(fontSize: bodyFontSize),
-                              ),
-                              WidgetSpan(child: const SizedBox(height: 46)),
-                              TextSpan(
-                                text: '$_counterBehind',
-                                style: TextStyle(fontSize: 34.0),
                               ),
                             ],
                           ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            IconButton(
+                              icon: Container(
+                                width: iconSize * 2,
+                                height: iconSize,
+                                child: Icon(Icons.replay, size: iconSize),
+                              ),
+                              onPressed: _resetCounterBehind,
+                            ),
+                            Container(
+                              width: iconSize * 2,
+                              height: iconSize * 2,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  OverflowBox(
+                                    minWidth: 0.0,
+                                    maxWidth: double.infinity,
+                                    minHeight: 0.0,
+                                    maxHeight: double.infinity,
+                                    child: Text(
+                                      '$_counterBehind',
+                                      style: TextStyle(
+                                          fontSize: counterNumbersSize,
+                                          fontFeatures: [
+                                            FontFeature.tabularFigures()
+                                          ]),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                                width: iconSize * 2, height: iconSize),
+                          ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -335,6 +405,8 @@ class _CounterPageState extends State<CounterPage> {
                               ),
                               onPressed: _decrementCounterBehind,
                             ),
+                            const SizedBox(
+                                width: iconSize * 2, height: iconSize),
                             IconButton(
                               icon: Container(
                                 width: iconSize * 2,
@@ -349,14 +421,6 @@ class _CounterPageState extends State<CounterPage> {
                                     size: iconSize, color: Colors.white),
                               ),
                               onPressed: _incrementCounterBehind,
-                            ),
-                            IconButton(
-                              icon: Container(
-                                width: iconSize * 2,
-                                height: iconSize,
-                                child: Icon(Icons.replay, size: iconSize),
-                              ),
-                              onPressed: _resetCounterBehind,
                             ),
                           ],
                         ),
@@ -401,8 +465,10 @@ class _CounterPageState extends State<CounterPage> {
                                             Text(
                                               '$_timer', // タイマーの値
                                               style: TextStyle(
-                                                  fontSize:
-                                                      36), // $_timerのフォントサイズ
+                                                  fontSize: timerNumbersSize,
+                                                  fontFeatures: [
+                                                    FontFeature.tabularFigures()
+                                                  ]),
                                             ),
                                           ],
                                         ),
@@ -505,7 +571,8 @@ class _CounterPageState extends State<CounterPage> {
                                             AppLocalizations.of(context)!
                                                 .incomputable,
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(fontSize: 20.0),
+                                            style: TextStyle(
+                                                fontSize: noResultFontSize),
                                           ),
                                           actions: <Widget>[
                                             TextButton(
@@ -545,7 +612,7 @@ class _CounterPageState extends State<CounterPage> {
                                               TextSpan(
                                                 text: '${minutes}',
                                                 style: TextStyle(
-                                                    fontSize: 30.0,
+                                                    fontSize: resultNumbersSize,
                                                     color: Colors.black),
                                               ),
                                               TextSpan(
@@ -561,7 +628,8 @@ class _CounterPageState extends State<CounterPage> {
                                                 TextSpan(
                                                   text: '${seconds}',
                                                   style: TextStyle(
-                                                      fontSize: 30.0,
+                                                      fontSize:
+                                                          resultNumbersSize,
                                                       color: Colors.black),
                                                 ),
                                                 TextSpan(

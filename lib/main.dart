@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:vibration/vibration.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:audio_session/audio_session.dart';
 
 const double iconSize = 36;
 const double counterNumbersSize = 52;
@@ -43,6 +44,13 @@ void main() async {
       ),
     );
   });
+}
+
+final player = AudioPlayer();
+Future<void> playSoundForDuration(int durationMillis) async {
+  await player.setSourceUrl('asset:///path_to_audio_file.mp3');
+  await Future.delayed(Duration(milliseconds: durationMillis));
+  await player.stop();
 }
 
 class MyApp extends StatelessWidget {
@@ -136,25 +144,6 @@ class _CounterPageState extends State<CounterPage> {
     });
   }
 
-  void _startTimer() {
-    _countdownTimer?.cancel(); // 既存のタイマーをキャンセル
-    setState(() {
-      _timer = 60;
-    });
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_timer > 0) {
-          _timer--;
-        } else {
-          // タイマーが0になった時の処理
-          _countdownTimer?.cancel();
-          Vibration.vibrate();
-          FlutterRingtonePlayer.playAlarm();
-        }
-      });
-    });
-  }
-
   void _toggleTimer() {
     if (_timer == 0) {
       setState(() {
@@ -169,8 +158,8 @@ class _CounterPageState extends State<CounterPage> {
           } else {
             _countdownTimer?.cancel();
             _countdownTimer = null;
-            Vibration.vibrate();
-            FlutterRingtonePlayer.playAlarm();
+            _playAlarm();
+            _startRepeatedVibration();
           }
         });
       });
@@ -180,6 +169,52 @@ class _CounterPageState extends State<CounterPage> {
         _countdownTimer = null;
       });
     }
+  }
+
+  void _startTimer() {
+    _countdownTimer?.cancel();
+    setState(() {
+      _timer = 60;
+    });
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_timer > 0) {
+          _timer--;
+        } else {
+          _countdownTimer?.cancel();
+          final player = AudioPlayer();
+          player.setSource(AssetSource('alarm.mp3'));
+          player.play(AssetSource('alarm.mp3'));
+          // Android alarm time
+          Future.delayed(const Duration(seconds: 3), () {
+            player.stop();
+          });
+        }
+      });
+    });
+  }
+
+  void _playAlarm() async {
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration.music());
+    final player = AudioPlayer();
+    await player.setSource(AssetSource('alarm.mp3'));
+    await player.play(AssetSource('alarm.mp3'));
+    // iOS alarm time
+    Future.delayed(const Duration(seconds: 3), () {
+      player.stop();
+    });
+  }
+
+  void _startRepeatedVibration() {
+    Vibration.vibrate(duration: 300);
+    Timer.periodic(const Duration(seconds: 1), (Timer vibrationOrder) {
+      if (vibrationOrder.tick < 3) {
+        Vibration.vibrate(duration: 300);
+      } else {
+        vibrationOrder.cancel();
+      }
+    });
   }
 
   @override

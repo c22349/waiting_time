@@ -186,7 +186,7 @@ class _CounterPageState extends State<CounterPage> {
           player.setSource(AssetSource('alarm.mp3'));
           player.play(AssetSource('alarm.mp3'));
           // Android alarm time
-          Future.delayed(const Duration(seconds: 3), () {
+          Future.delayed(const Duration(seconds: 2), () {
             player.stop();
           });
         }
@@ -201,16 +201,16 @@ class _CounterPageState extends State<CounterPage> {
     await player.setSource(AssetSource('alarm.mp3'));
     await player.play(AssetSource('alarm.mp3'));
     // iOS alarm time
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       player.stop();
     });
   }
 
   void _startRepeatedVibration() {
-    Vibration.vibrate(duration: 300);
+    Vibration.vibrate(duration: 250);
     Timer.periodic(const Duration(seconds: 1), (Timer vibrationOrder) {
-      if (vibrationOrder.tick < 3) {
-        Vibration.vibrate(duration: 300);
+      if (vibrationOrder.tick < 2) {
+        Vibration.vibrate(duration: 250);
       } else {
         vibrationOrder.cancel();
       }

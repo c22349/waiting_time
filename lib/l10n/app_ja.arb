@@ -13,5 +13,6 @@
   "calculation_supplement": "リトルの法則での簡易的な計算",
   "close": "閉じる",
   "settings": "設定",
-  "language_settings": "言語設定"
+  "language_settings": "言語",
+  "sound_settings": "アラーム音"
 }

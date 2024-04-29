@@ -52,8 +52,12 @@
       "@settings": {
         "description": "settings label"
       },
-  "language_settings": "Language settings",
+  "language_settings": "Language",
       "@language_settings": {
         "description": "Language settings label"
+      },
+  "sound_settings": "Alarm sound",
+      "@sound_settings": {
+        "description": "Alarm sound settings label"
       }
 }

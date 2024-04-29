@@ -158,7 +158,11 @@ class _CounterPageState extends State<CounterPage> {
           } else {
             _countdownTimer?.cancel();
             _countdownTimer = null;
-            _playAlarm();
+            if (Provider.of<SettingModel>(context, listen: false)
+                .soundEnabled) {
+              // スイッチがONの場合のみアラームを鳴らす
+              _playAlarm();
+            }
             _startRepeatedVibration();
           }
         });
@@ -181,14 +185,18 @@ class _CounterPageState extends State<CounterPage> {
         if (_timer > 0) {
           _timer--;
         } else {
-          _countdownTimer?.cancel();
-          final player = AudioPlayer();
-          player.setSource(AssetSource('alarm.mp3'));
-          player.play(AssetSource('alarm.mp3'));
-          // Android alarm time
-          Future.delayed(const Duration(seconds: 2), () {
-            player.stop();
-          });
+          if (Provider.of<SettingModel>(context, listen: false).soundEnabled) {
+            // スイッチがONの場合のみアラームを鳴らす
+            _startRepeatedVibration();
+            _countdownTimer?.cancel();
+            final player = AudioPlayer();
+            player.setSource(AssetSource('alarm.mp3'));
+            player.play(AssetSource('alarm.mp3'));
+            // Android alarm time
+            Future.delayed(const Duration(seconds: 2), () {
+              player.stop();
+            });
+          }
         }
       });
     });

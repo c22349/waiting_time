@@ -8,6 +8,8 @@ class SettingModel with ChangeNotifier {
   bool get startSettingPage => _startSettingPage;
   Locale _currentLocale = Locale('ja', '');
   Locale get currentLocale => _currentLocale;
+  bool _soundEnabled = true;
+  bool get soundEnabled => _soundEnabled;
 
   // SharedPreferencesへの設定値の保存と通知を行う非同期メソッド
   Future<void> setStartPageA(bool value) async {
@@ -67,6 +69,19 @@ class SettingModel with ChangeNotifier {
     String defaultLanguageCode =
         deviceLocale.languageCode == 'ja' ? 'ja' : 'en';
     _currentLocale = Locale(savedLanguageCode ?? defaultLanguageCode, '');
+    notifyListeners();
+    _soundEnabled = prefs.getBool('soundEnabled') ?? true;
+  }
+
+  void updateSoundSetting(bool isEnabled) {
+    _soundEnabled = isEnabled;
+    notifyListeners();
+  }
+
+  void setSoundEnabled(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('soundEnabled', value);
+    _soundEnabled = value;
     notifyListeners();
   }
 }

@@ -88,10 +88,55 @@ class MyApp extends StatelessWidget {
               color: Color(0xFFE8E2D7), // タイトルバー背景色
             ),
           ),
-          home: const CounterPage(),
+          home: FutureBuilder<bool>(
+            future: VersionCheckService().versionCheck(),
+            builder: (context, snapshot) {
+              // if (snapshot.data == true) {
+              //   // アップデートが必要な場合の画面を表示
+              //   return UpdateRequiredScreen();
+              // }
+              // 通常のホーム画面を表示
+              return CounterPage();
+            },
+          ),
         );
       },
     );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('ホーム'),
+      ),
+      body: Center(
+        child: Text('ホーム画面'),
+      ),
+    );
+  }
+}
+
+// class UpdateRequiredScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('アップデートが必要です'),
+//       ),
+//       body: Center(
+//         child: Text('このアプリの新しいバージョンが必要です。アップデートしてください。'),
+//       ),
+//     );
+//   }
+// }
+
+class VersionCheckService {
+  Future<bool> versionCheck() async {
+    // バージョンチェックのロジックを実装
+    return true; // または false
   }
 }
 

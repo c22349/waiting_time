@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'view/settings.dart';
 import 'viewmodel/setting_model.dart';
+import 'view/update_prompt_dialog.dart';
+import 'function/version_check_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +13,8 @@ import 'package:flutter/services.dart';
 import 'package:vibration/vibration.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 const double iconSize = 36;
 const double counterNumbersSize = 52;
@@ -27,6 +31,9 @@ Future<Locale> _fetchLocale() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -44,13 +51,6 @@ void main() async {
       ),
     );
   });
-}
-
-final player = AudioPlayer();
-Future<void> playSoundForDuration(int durationMillis) async {
-  await player.setSourceUrl('asset:///path_to_audio_file.mp3');
-  await Future.delayed(Duration(milliseconds: durationMillis));
-  await player.stop();
 }
 
 class MyApp extends StatelessWidget {
@@ -91,10 +91,15 @@ class MyApp extends StatelessWidget {
           home: FutureBuilder<bool>(
             future: VersionCheckService().versionCheck(),
             builder: (context, snapshot) {
-              // if (snapshot.data == true) {
-              //   // アップデートが必要な場合の画面を表示
-              //   return UpdateRequiredScreen();
-              // }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                // ネット未接続の場合スキップ
+                return CounterPage();
+              } else if (snapshot.data == true) {
+                // アップデートが必要な場合の画面を表示
+                return UpdatePromptDialog();
+              }
               // 通常のホーム画面を表示
               return CounterPage();
             },
@@ -116,27 +121,6 @@ class HomeScreen extends StatelessWidget {
         child: Text('ホーム画面'),
       ),
     );
-  }
-}
-
-// class UpdateRequiredScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('アップデートが必要です'),
-//       ),
-//       body: Center(
-//         child: Text('このアプリの新しいバージョンが必要です。アップデートしてください。'),
-//       ),
-//     );
-//   }
-// }
-
-class VersionCheckService {
-  Future<bool> versionCheck() async {
-    // バージョンチェックのロジックを実装
-    return true; // または false
   }
 }
 

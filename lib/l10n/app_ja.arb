@@ -14,5 +14,8 @@
   "close": "閉じる",
   "settings": "設定",
   "language_settings": "言語",
-  "sound_settings": "アラーム音"
+  "sound_settings": "アラーム音",
+  "update_message": "新しいバージョンが出ました。\n\n最新版のアップデートをお願いいたします。",
+  "update": "今すぐ更新",
+  "later": "あとで"
 }

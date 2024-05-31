@@ -59,5 +59,17 @@
   "sound_settings": "Alarm sound",
       "@sound_settings": {
         "description": "Alarm sound settings label"
+      },
+  "update_message": "A new version is available.\n\nPlease update to the latest version.",
+      "@sound_settings": {
+        "description": "Update dialog message"
+      },
+  "update": "Update now",
+  "@update": {
+    "description": "Update button"
+      },
+  "later": "Later",
+  "@later": {
+    "description": "Later button"
       }
 }

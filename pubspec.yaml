@@ -39,12 +39,13 @@ dependencies:
   vibration: ^1.9.0
   flutter_ringtone_player: ^3.2.0
   audioplayers: ^6.0.0
-  shared_preferences: ^2.2.3
+  auto_size_text: ^3.0.0
   audio_session: ^0.1.19
   just_audio: ^0.9.38
   get_it: ^7.7.0
   flutter_launcher_icons: any
   pub_semver: ^2.0.0
+  shared_preferences: ^2.2.3
   
   # Firebase
   firebase_analytics: ^10.10.6

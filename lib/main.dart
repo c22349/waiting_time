@@ -14,6 +14,7 @@ import 'package:vibration/vibration.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'firebase_options.dart';
 
 const double iconSize = 36;
@@ -317,7 +318,9 @@ class _CounterPageState extends State<CounterPage> {
                               TextSpan(
                                 text:
                                     '${AppLocalizations.of(context)!.line_in_front_of}',
-                                style: TextStyle(fontSize: bodyFontSize),
+                                style: TextStyle(
+                                    fontSize: bodyFontSize,
+                                    fontWeight: FontWeight.normal),
                               ),
                             ],
                           ),
@@ -417,7 +420,9 @@ class _CounterPageState extends State<CounterPage> {
                               TextSpan(
                                 text:
                                     '${AppLocalizations.of(context)!.line_behind}',
-                                style: TextStyle(fontSize: bodyFontSize),
+                                style: TextStyle(
+                                    fontSize: bodyFontSize,
+                                    fontWeight: FontWeight.normal),
                               ),
                             ],
                           ),
@@ -522,28 +527,30 @@ class _CounterPageState extends State<CounterPage> {
                                     TextSpan(
                                       text:
                                           '${AppLocalizations.of(context)!.minute_timer} \n',
-                                      style: TextStyle(fontSize: bodyFontSize),
+                                      style: TextStyle(
+                                          fontSize: bodyFontSize,
+                                          fontWeight: FontWeight.normal),
                                     ),
                                     WidgetSpan(
                                       child: SizedBox(height: 60),
                                     ),
                                     WidgetSpan(
-                                      child: Container(
-                                        width: 50,
-                                        alignment: Alignment.center,
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              '$_timer', // タイマーの値
-                                              style: TextStyle(
-                                                  fontSize: timerNumbersSize,
-                                                  fontFeatures: [
-                                                    FontFeature.tabularFigures()
-                                                  ]),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          AutoSizeText(
+                                            '$_timer', // タイマーの値
+                                            style: TextStyle(
+                                              fontSize: timerNumbersSize,
+                                              fontFeatures: [
+                                                FontFeature.tabularFigures()
+                                              ],
                                             ),
-                                          ],
-                                        ),
+                                            maxLines: 1,
+                                            minFontSize: 10,
+                                            maxFontSize: 30,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     WidgetSpan(
@@ -617,7 +624,9 @@ class _CounterPageState extends State<CounterPage> {
                               Text(
                                 '${AppLocalizations.of(context)!.calculate}',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: bodyFontSize),
+                                style: TextStyle(
+                                    fontSize: bodyFontSize,
+                                    fontWeight: FontWeight.normal),
                               ),
                               SizedBox(height: 32),
                               IconButton(

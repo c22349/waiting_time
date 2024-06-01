@@ -48,7 +48,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDkcuAdNAzeah_y2zpLJMxndQK7_SGAsgg',
-    appId: '1:444374881776:android:90aab26eb3d6c036fcb935',
+    appId: '1:444374881776:android:7ccaa9e1b1c27fabfcb935',
     messagingSenderId: '444374881776',
     projectId: 'waiting-time-app-74351',
     storageBucket: 'waiting-time-app-74351.appspot.com',
@@ -56,10 +56,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCi1dR1EQrHYcmlK4sTD9J3UK_bIYnmkIQ',
-    appId: '1:444374881776:ios:deacf0d4764cc946fcb935',
+    appId: '1:444374881776:ios:c7fe26a45d058573fcb935',
     messagingSenderId: '444374881776',
     projectId: 'waiting-time-app-74351',
     storageBucket: 'waiting-time-app-74351.appspot.com',
-    iosBundleId: 'com.example.waitingTime',
+    iosBundleId: 'com.queue-time',
   );
+
 }

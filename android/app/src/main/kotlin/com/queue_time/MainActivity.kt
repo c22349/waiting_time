@@ -1,4 +1,4 @@
-package com.example.waiting_time
+package com.queue_time
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,0 +1,21 @@
+{
+  "@@locale": "ja",
+  "main_title": "待ち時間予想",
+  "line_in_front_of": "前に並んでいる行列の人数",
+  "line_behind": "1分間で後ろに並んだ人数",
+  "minute_timer": "1分間タイマー",
+  "heading_seconds": "秒",
+  "calculate": "計算",
+  "estimated_waiting_time": "予想待ち時間",
+  "minute": "分",
+  "seconds": "秒",
+  "incomputable": "計算不可",
+  "calculation_supplement": "リトルの法則での簡易的な計算",
+  "close": "閉じる",
+  "settings": "設定",
+  "language_settings": "言語",
+  "sound_settings": "アラーム音",
+  "update_message": "新しいバージョンが出ました。\n\n最新版のアップデートをお願いいたします。",
+  "update": "今すぐ更新",
+  "later": "あとで"
+}

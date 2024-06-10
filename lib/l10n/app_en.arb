@@ -1,0 +1,75 @@
+{
+  "@@locale": "en",
+  "main_title": "Waiting time forecast",
+      "@main_title": {
+        "description": "title label"
+      },
+  "line_in_front_of": "Number of people\nin line in front of you",
+      "@line_in_front_of": {
+        "description": "line in front label"
+      },
+  "line_behind": "Number of people\nlined up behind you in 1 minute",
+      "@line_behind": {
+        "description": "lined up behind you label"
+      },
+  "minute_timer": "1 minute timer",
+      "@minute_timer": {
+        "description": "1 minute timer label"
+      },
+  "heading_seconds": "S",
+      "@heading_seconds": {
+        "description": "heading seconds label"
+      },
+  "calculate": "calculate",
+      "@calculate": {
+        "description": "calculate label"
+      },
+  "estimated_waiting_time": "Estimated waiting time",
+      "@estimated_waiting_time": {
+        "description": "Estimated waiting time label"
+      },
+  "minute": "minute",
+      "@minute": {
+        "description": "minute label"
+      },
+  "seconds": "seconds",
+      "@seconds": {
+        "description": "seconds label"
+      },    
+  "incomputable": "Incomputable",
+    "@incomputable": {
+      "description": "Incomputable"
+    },
+  "calculation_supplement": "Simplified calculations using\nLittle's Law",
+    "@calculation_supplement": {
+      "description": "Calculation Supplement"
+    },
+  "close": "close",
+      "@close": {
+        "description": "close label"
+      },
+  "settings": "Settings",
+      "@settings": {
+        "description": "settings label"
+      },
+  "language_settings": "Language",
+      "@language_settings": {
+        "description": "Language settings label"
+      },
+  "sound_settings": "Alarm sound",
+      "@sound_settings": {
+        "description": "Alarm sound settings label"
+      },
+  "update_message": "A new version is available.\n\nPlease update to the latest version.",
+      "@sound_settings": {
+        "description": "Update dialog message"
+      },
+  "update": "Update now",
+  "@update": {
+    "description": "Update button"
+      },
+  "later": "Later",
+  "@later": {
+    "description": "Later button"
+      }
+}

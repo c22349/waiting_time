@@ -64,6 +64,7 @@ class MyApp extends StatelessWidget {
     return Consumer<SettingModel>(
       builder: (context, settings, child) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           locale: settings.currentLocale, // 現在のロケールを使用
           localizationsDelegates: [
             AppLocalizations.delegate,

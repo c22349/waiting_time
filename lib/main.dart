@@ -16,6 +16,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'firebase_options.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 const double iconSize = 36;
 const double counterNumbersSize = 52;
@@ -173,6 +174,52 @@ class _CounterPageState extends State<CounterPage> {
     setState(() {
       _counterBehind = 0;
     });
+  }
+
+  void _showNumberPickerDialog(bool isFrontCounter) async {
+    final selectedValue = await showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(isFrontCounter
+              ? AppLocalizations.of(context)!.line_in_front_of
+              : AppLocalizations.of(context)!.line_behind),
+          content: NumberPicker(
+            value: isFrontCounter ? _counterFront : _counterBehind,
+            minValue: 0,
+            maxValue: 10000,
+            onChanged: (value) {
+              setState(() {
+                if (isFrontCounter) {
+                  _counterFront = value;
+                } else {
+                  _counterBehind = value;
+                }
+              });
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.close),
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(isFrontCounter ? _counterFront : _counterBehind);
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    if (selectedValue != null) {
+      setState(() {
+        if (isFrontCounter) {
+          _counterFront = selectedValue;
+        } else {
+          _counterBehind = selectedValue;
+        }
+      });
+    }
   }
 
   void _toggleTimer() {
@@ -343,18 +390,21 @@ class _CounterPageState extends State<CounterPage> {
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: <Widget>[
-                                  OverflowBox(
-                                    minWidth: 0.0,
-                                    maxWidth: double.infinity,
-                                    minHeight: 0.0,
-                                    maxHeight: double.infinity,
-                                    child: Text(
-                                      '$_counterFront',
-                                      style: TextStyle(
-                                          fontSize: counterNumbersSize,
-                                          fontFeatures: [
-                                            FontFeature.tabularFigures()
-                                          ]),
+                                  GestureDetector(
+                                    onTap: () => _showNumberPickerDialog(true),
+                                    child: OverflowBox(
+                                      minWidth: 0.0,
+                                      maxWidth: double.infinity,
+                                      minHeight: 0.0,
+                                      maxHeight: double.infinity,
+                                      child: Text(
+                                        '$_counterFront',
+                                        style: TextStyle(
+                                            fontSize: counterNumbersSize,
+                                            fontFeatures: [
+                                              FontFeature.tabularFigures()
+                                            ]),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -445,18 +495,21 @@ class _CounterPageState extends State<CounterPage> {
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: <Widget>[
-                                  OverflowBox(
-                                    minWidth: 0.0,
-                                    maxWidth: double.infinity,
-                                    minHeight: 0.0,
-                                    maxHeight: double.infinity,
-                                    child: Text(
-                                      '$_counterBehind',
-                                      style: TextStyle(
-                                          fontSize: counterNumbersSize,
-                                          fontFeatures: [
-                                            FontFeature.tabularFigures()
-                                          ]),
+                                  GestureDetector(
+                                    onTap: () => _showNumberPickerDialog(false),
+                                    child: OverflowBox(
+                                      minWidth: 0.0,
+                                      maxWidth: double.infinity,
+                                      minHeight: 0.0,
+                                      maxHeight: double.infinity,
+                                      child: Text(
+                                        '$_counterBehind',
+                                        style: TextStyle(
+                                            fontSize: counterNumbersSize,
+                                            fontFeatures: [
+                                              FontFeature.tabularFigures()
+                                            ]),
+                                      ),
                                     ),
                                   ),
                                 ],

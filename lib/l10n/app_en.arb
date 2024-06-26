@@ -12,6 +12,22 @@
       "@line_behind": {
         "description": "lined up behind you label"
       },
+  "line_in_front_of_dialog": "Number of people\nin front of you",
+      "@line_in_front_of_dialog": {
+        "description": "line in front dialog"
+      },
+  "line_behind_dialog": "Number of people\nbehind you",
+      "@line_behind_dialog": {
+        "description": "lined up behind you dialog"
+      },
+  "dialog_decision": "OK",
+      "@dialog_decision": {
+        "description": "dialog decision"
+      },
+  "dialog_cancel": "Cancel",
+      "@dialog_cancel": {
+        "description": "dialog cancel"
+      },
   "minute_timer": "1 minute timer",
       "@minute_timer": {
         "description": "1 minute timer label"

@@ -12,11 +12,11 @@
       "@line_behind": {
         "description": "lined up behind you label"
       },
-  "line_in_front_of_dialog": "Number of people\nin front of you",
+  "line_in_front_of_dialog": "Number of people in front of you",
       "@line_in_front_of_dialog": {
         "description": "line in front dialog"
       },
-  "line_behind_dialog": "Number of people\nbehind you",
+  "line_behind_dialog": "Number of people behind you",
       "@line_behind_dialog": {
         "description": "lined up behind you dialog"
       },

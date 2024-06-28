@@ -423,6 +423,17 @@ class _CounterPageState extends State<CounterPage> {
                                                                       .text
                                                                       .length),
                                                         );
+                                                      } else if (value
+                                                          .isEmpty) {
+                                                        _counterFrontController
+                                                            .text = '0';
+                                                        _counterFrontController
+                                                                .selection =
+                                                            TextSelection
+                                                                .fromPosition(
+                                                          TextPosition(
+                                                              offset: 1),
+                                                        );
                                                       }
                                                     },
                                                   ),
@@ -609,6 +620,17 @@ class _CounterPageState extends State<CounterPage> {
                                                                   _counterBehindController
                                                                       .text
                                                                       .length),
+                                                        );
+                                                      } else if (value
+                                                          .isEmpty) {
+                                                        _counterBehindController
+                                                            .text = '0';
+                                                        _counterBehindController
+                                                                .selection =
+                                                            TextSelection
+                                                                .fromPosition(
+                                                          TextPosition(
+                                                              offset: 1),
                                                         );
                                                       }
                                                     },

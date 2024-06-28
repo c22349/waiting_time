@@ -153,12 +153,14 @@ class _CounterPageState extends State<CounterPage> {
   void _updateCounterFront(String value) {
     setState(() {
       _counterFront = int.tryParse(value) ?? _counterFront;
+      _counterFrontController.text = '$_counterFront';
     });
   }
 
   void _updateCounterBehind(String value) {
     setState(() {
       _counterBehind = int.tryParse(value) ?? _counterBehind;
+      _counterBehindController.text = '$_counterBehind';
     });
   }
 
@@ -292,6 +294,7 @@ class _CounterPageState extends State<CounterPage> {
     // ロケールに基づいてフォントサイズを設定
     double titleFontSize = locale.languageCode == 'ja' ? 22.0 : 20.0;
     double bodyFontSize = locale.languageCode == 'ja' ? 20.0 : 16.0;
+    double dialogFontSize = locale.languageCode == 'ja' ? 18.0 : 16.0;
     double calculationFontSize = locale.languageCode == 'ja' ? 20.0 : 18.0;
     double SupplementFontSize = locale.languageCode == 'ja' ? 16.0 : 16.0;
     double closeFontSize = locale.languageCode == 'ja' ? 20.0 : 18.0;
@@ -377,11 +380,15 @@ class _CounterPageState extends State<CounterPage> {
                                             await showDialog<String>(
                                           context: context,
                                           builder: (BuildContext context) {
+                                            _counterFrontController.text =
+                                                '$_counterFront'; // 現在のカウントを反映
                                             return AlertDialog(
                                               title: Text(
                                                 AppLocalizations.of(context)!
                                                     .line_in_front_of_dialog,
                                                 textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: dialogFontSize),
                                               ),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -397,7 +404,27 @@ class _CounterPageState extends State<CounterPage> {
                                                     ],
                                                     textAlign: TextAlign.center,
                                                     style:
-                                                        TextStyle(fontSize: 24),
+                                                        TextStyle(fontSize: 34),
+                                                    onChanged: (value) {
+                                                      if (value.isNotEmpty &&
+                                                          value != '0') {
+                                                        _counterFrontController
+                                                                .text =
+                                                            value.replaceFirst(
+                                                                RegExp(r'^0+'),
+                                                                '');
+                                                        _counterFrontController
+                                                                .selection =
+                                                            TextSelection
+                                                                .fromPosition(
+                                                          TextPosition(
+                                                              offset:
+                                                                  _counterFrontController
+                                                                      .text
+                                                                      .length),
+                                                        );
+                                                      }
+                                                    },
                                                   ),
                                                 ],
                                               ),
@@ -540,11 +567,15 @@ class _CounterPageState extends State<CounterPage> {
                                             await showDialog<String>(
                                           context: context,
                                           builder: (BuildContext context) {
+                                            _counterBehindController.text =
+                                                '$_counterBehind'; // 現在のカウントを反映
                                             return AlertDialog(
                                               title: Text(
                                                 AppLocalizations.of(context)!
                                                     .line_behind_dialog,
                                                 textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: dialogFontSize),
                                               ),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -560,7 +591,27 @@ class _CounterPageState extends State<CounterPage> {
                                                     ],
                                                     textAlign: TextAlign.center,
                                                     style:
-                                                        TextStyle(fontSize: 24),
+                                                        TextStyle(fontSize: 34),
+                                                    onChanged: (value) {
+                                                      if (value.isNotEmpty &&
+                                                          value != '0') {
+                                                        _counterBehindController
+                                                                .text =
+                                                            value.replaceFirst(
+                                                                RegExp(r'^0+'),
+                                                                '');
+                                                        _counterBehindController
+                                                                .selection =
+                                                            TextSelection
+                                                                .fromPosition(
+                                                          TextPosition(
+                                                              offset:
+                                                                  _counterBehindController
+                                                                      .text
+                                                                      .length),
+                                                        );
+                                                      }
+                                                    },
                                                   ),
                                                 ],
                                               ),

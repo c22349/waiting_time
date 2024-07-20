@@ -56,7 +56,6 @@ dependencies:
     
 flutter_icons:
   ios: true
-  android: true
   image_path_ios: "assets/icon_ios.png"
 
 dev_dependencies:

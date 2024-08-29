@@ -3,6 +3,7 @@ import 'dart:async';
 import 'view/settings.dart';
 import 'viewmodel/setting_model.dart';
 import 'view/update_prompt_dialog.dart';
+import 'view/admob_helper.dart';
 import 'function/version_check_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,7 +17,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'firebase_options.dart';
-import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 const double iconSize = 36;
 const double counterNumbersSize = 52;
@@ -139,15 +140,39 @@ class _CounterPageState extends State<CounterPage> {
   int _counterBehind = 0;
   int _timer = 60;
   Timer? _countdownTimer;
+  late BannerAd myBanner;
 
   final TextEditingController _counterFrontController = TextEditingController();
   final TextEditingController _counterBehindController =
       TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _counterFrontController.text = '$_counterFront';
     _counterBehindController.text = '$_counterBehind';
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _initBannerAd();
+  }
+
+  void _initBannerAd() {
+    final AdSize adSize = _getAdSize();
+    myBanner = BannerAd(
+      adUnitId: getAdBannerUnitId(),
+      size: adSize,
+      request: const AdRequest(),
+      listener: const BannerAdListener(),
+    );
+    myBanner.load();
+  }
+
+  AdSize _getAdSize() {
+    final width = MediaQuery.of(context).size.width.toInt();
+    return AdSize(width: width, height: 60);
   }
 
   void _updateCounterFront(String value) {
@@ -977,6 +1002,14 @@ class _CounterPageState extends State<CounterPage> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 24),
+                  Container(
+                    width: AdSize.fullBanner.width.toDouble(),
+                    height: AdSize.fullBanner.height.toDouble(),
+                    alignment: Alignment.center,
+                    child: AdWidget(ad: myBanner),
+                  ),
+                  const SafeArea(child: SizedBox.shrink()),
                 ],
               ),
             ),

@@ -49,5 +49,7 @@
 	</array>
   <key>NSMicrophoneUsageDescription</key>
 	<string>To sound when the timer reaches zero.</string>
+  <key>GADApplicationIdentifier</key>
+  <string>ca-app-pub-6406325278701298~9431619223</string>
 </dict>
 </plist>

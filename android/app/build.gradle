@@ -26,10 +26,10 @@ if (localPropertiesFile.exists()) {
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-    flutterVersionCode = '1'
+    flutterVersionCode = '8'
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
-    flutterVersionName = '1.2.0'
+    flutterVersionName = '1.1.0'
 
 android {
     namespace "com.queue_time"

@@ -1,6 +1,6 @@
 # waiting_time
 
-This is a personally developed QueueTime app project.
+This is a personally developed "QueueTime" app project.
 
 Android: https://play.google.com/store/apps/details?id=com.queue_time
 <br>

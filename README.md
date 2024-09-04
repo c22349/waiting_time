@@ -6,7 +6,6 @@ Android: https://play.google.com/store/apps/details?id=com.queue_time
 <br>
 iOS: https://apps.apple.com/jp/app/id6503664751?mt=8
 
-
 ## Getting Started
 This project is a starting point for a Flutter application.
 

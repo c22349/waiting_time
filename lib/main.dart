@@ -1,30 +1,26 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
-import 'view/settings.dart';
-import 'viewmodel/setting_model.dart';
-import 'view/update_prompt_dialog.dart';
-import 'view/admob_helper.dart';
-import 'function/version_check_service.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter/services.dart';
-import 'package:vibration/vibration.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:audio_session/audio_session.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vibration/vibration.dart';
 
-const double iconSize = 36;
-const double counterNumbersSize = 52;
-const double timerNumbersSize = 36;
-const double resultNumbersSize = 44;
-const double noResultFontSize = 32;
-const buttonColor = Color(0xFF5C5862);
+// 読み込みファイル
+import 'const.dart';
+import 'firebase_options.dart';
+import 'function/version_check_service.dart';
+import 'view/admob_helper.dart';
+import 'view/settings.dart';
+import 'view/update_prompt_dialog.dart';
+import 'viewmodel/setting_model.dart';
 
 Future<Locale> _fetchLocale() async {
   final prefs = await SharedPreferences.getInstance();

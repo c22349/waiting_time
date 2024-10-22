@@ -22,7 +22,7 @@ import 'view/settings.dart';
 import 'view/update_prompt_dialog.dart';
 import 'viewmodel/setting_model.dart';
 
-Future<Locale> _fetchLocale() async {
+Future<Locale> loadLocale() async {
   final prefs = await SharedPreferences.getInstance();
   final languageCode = prefs.getString('language') ?? 'ja';
   return Locale(languageCode, '');

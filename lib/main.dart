@@ -252,32 +252,33 @@ class _CounterPageState extends State<CounterPage> {
     }
   }
 
-  void _startTimer() {
-    _countdownTimer?.cancel();
-    setState(() {
-      _timer = 60;
-    });
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_timer > 0) {
-          _timer--;
-        } else {
-          if (Provider.of<SettingModel>(context, listen: false).soundEnabled) {
-            // スイッチがONの場合のみアラームを鳴らす
-            _startRepeatedVibration();
-            _countdownTimer?.cancel();
-            final player = AudioPlayer();
-            player.setSource(AssetSource('alarm.mp3'));
-            player.play(AssetSource('alarm.mp3'));
-            // Android alarm time
-            Future.delayed(const Duration(seconds: 2), () {
-              player.stop();
-            });
-          }
-        }
-      });
-    });
-  }
+  // Androidで利用している可能性あり
+  // void _startTimer() {
+  //   _countdownTimer?.cancel();
+  //   setState(() {
+  //     _timer = 60;
+  //   });
+  //   _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  //     setState(() {
+  //       if (_timer > 0) {
+  //         _timer--;
+  //       } else {
+  //         if (Provider.of<SettingModel>(context, listen: false).soundEnabled) {
+  //           // スイッチがONの場合のみアラームを鳴らす
+  //           _startRepeatedVibration();
+  //           _countdownTimer?.cancel();
+  //           final player = AudioPlayer();
+  //           player.setSource(AssetSource('alarm.mp3'));
+  //           player.play(AssetSource('alarm.mp3'));
+  //           // Android alarm time
+  //           Future.delayed(const Duration(seconds: 2), () {
+  //             player.stop();
+  //           });
+  //         }
+  //       }
+  //     });
+  //   });
+  // }
 
   void _playAlarm() async {
     final session = await AudioSession.instance;

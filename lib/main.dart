@@ -18,6 +18,7 @@ import 'const.dart';
 import 'firebase_options.dart';
 import 'function/version_check_service.dart';
 import 'view/admob_helper.dart';
+import 'view/counter_dialog.dart';
 import 'view/settings.dart';
 import 'view/update_prompt_dialog.dart';
 import 'viewmodel/setting_model.dart';
@@ -399,92 +400,12 @@ class _CounterPageState extends State<CounterPage> {
                                     child: GestureDetector(
                                       onTap: () async {
                                         String? newValue =
-                                            await showDialog<String>(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            _counterFrontController.text =
-                                                '$_counterFront'; // 現在のカウントを反映
-                                            return AlertDialog(
-                                              title: Text(
-                                                AppLocalizations.of(context)!
-                                                    .line_in_front_of_dialog,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: dialogFontSize),
-                                              ),
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  TextField(
-                                                    controller:
-                                                        _counterFrontController,
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    inputFormatters: <TextInputFormatter>[
-                                                      FilteringTextInputFormatter
-                                                          .digitsOnly
-                                                    ],
-                                                    textAlign: TextAlign.center,
-                                                    style:
-                                                        TextStyle(fontSize: 34),
-                                                    onChanged: (value) {
-                                                      if (value.isNotEmpty &&
-                                                          value != '0') {
-                                                        _counterFrontController
-                                                                .text =
-                                                            value.replaceFirst(
-                                                                RegExp(r'^0+'),
-                                                                '');
-                                                        _counterFrontController
-                                                                .selection =
-                                                            TextSelection
-                                                                .fromPosition(
-                                                          TextPosition(
-                                                              offset:
-                                                                  _counterFrontController
-                                                                      .text
-                                                                      .length),
-                                                        );
-                                                      } else if (value
-                                                          .isEmpty) {
-                                                        _counterFrontController
-                                                            .text = '0';
-                                                        _counterFrontController
-                                                                .selection =
-                                                            TextSelection
-                                                                .fromPosition(
-                                                          TextPosition(
-                                                              offset: 1),
-                                                        );
-                                                      }
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .dialog_cancel),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                                TextButton(
-                                                  child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .dialog_decision),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop(
-                                                        _counterFrontController
-                                                            .text);
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                            await showCounterDialog(
+                                          context,
+                                          _counterFrontController,
+                                          AppLocalizations.of(context)!
+                                              .line_in_front_of_dialog,
+                                          dialogFontSize,
                                         );
                                         if (newValue != null) {
                                           _updateCounterFront(newValue);
@@ -597,92 +518,12 @@ class _CounterPageState extends State<CounterPage> {
                                     child: GestureDetector(
                                       onTap: () async {
                                         String? newValue =
-                                            await showDialog<String>(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            _counterBehindController.text =
-                                                '$_counterBehind'; // 現在のカウントを反映
-                                            return AlertDialog(
-                                              title: Text(
-                                                AppLocalizations.of(context)!
-                                                    .line_behind_dialog,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: dialogFontSize),
-                                              ),
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  TextField(
-                                                    controller:
-                                                        _counterBehindController,
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    inputFormatters: <TextInputFormatter>[
-                                                      FilteringTextInputFormatter
-                                                          .digitsOnly
-                                                    ],
-                                                    textAlign: TextAlign.center,
-                                                    style:
-                                                        TextStyle(fontSize: 34),
-                                                    onChanged: (value) {
-                                                      if (value.isNotEmpty &&
-                                                          value != '0') {
-                                                        _counterBehindController
-                                                                .text =
-                                                            value.replaceFirst(
-                                                                RegExp(r'^0+'),
-                                                                '');
-                                                        _counterBehindController
-                                                                .selection =
-                                                            TextSelection
-                                                                .fromPosition(
-                                                          TextPosition(
-                                                              offset:
-                                                                  _counterBehindController
-                                                                      .text
-                                                                      .length),
-                                                        );
-                                                      } else if (value
-                                                          .isEmpty) {
-                                                        _counterBehindController
-                                                            .text = '0';
-                                                        _counterBehindController
-                                                                .selection =
-                                                            TextSelection
-                                                                .fromPosition(
-                                                          TextPosition(
-                                                              offset: 1),
-                                                        );
-                                                      }
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .dialog_cancel),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                                TextButton(
-                                                  child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .dialog_decision),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop(
-                                                        _counterBehindController
-                                                            .text);
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                            await showCounterDialog(
+                                          context,
+                                          _counterBehindController,
+                                          AppLocalizations.of(context)!
+                                              .line_behind_dialog,
+                                          dialogFontSize,
                                         );
                                         if (newValue != null) {
                                           _updateCounterBehind(newValue);

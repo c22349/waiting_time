@@ -111,20 +111,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('ホーム'),
-      ),
-      body: Center(
-        child: Text('ホーム画面'),
-      ),
-    );
-  }
-}
-
 class CounterPage extends StatefulWidget {
   const CounterPage({super.key});
 

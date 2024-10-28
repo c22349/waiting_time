@@ -84,9 +84,9 @@ class MyApp extends StatelessWidget {
           },
           theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
-            scaffoldBackgroundColor: Color(0xFFE8E2D7), // 背景色
+            scaffoldBackgroundColor: backgroundColor,
             appBarTheme: AppBarTheme(
-              color: Color(0xFFE8E2D7), // タイトルバー背景色
+              color: backgroundColor,
             ),
           ),
           home: FutureBuilder<bool>(

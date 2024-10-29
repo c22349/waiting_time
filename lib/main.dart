@@ -10,7 +10,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// 使用していない可能性あり(Android側未検証)
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibration/vibration.dart';
 
 // 読み込みファイル
@@ -23,11 +24,12 @@ import 'view/settings.dart';
 import 'view/update_prompt_dialog.dart';
 import 'viewmodel/setting_model.dart';
 
-Future<Locale> loadLocale() async {
-  final prefs = await SharedPreferences.getInstance();
-  final languageCode = prefs.getString('language') ?? 'ja';
-  return Locale(languageCode, '');
-}
+// 使用していない可能性あり(Android側未検証)
+// Future<Locale> loadLocale() async {
+//   final prefs = await SharedPreferences.getInstance();
+//   final languageCode = prefs.getString('language') ?? 'ja';
+//   return Locale(languageCode, '');
+// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,7 +66,7 @@ class MyApp extends StatelessWidget {
       builder: (context, settings, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          locale: settings.currentLocale, // 現在のロケールを使用
+          locale: settings.currentLocale, // 現在のローカル
           localizationsDelegates: [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

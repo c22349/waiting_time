@@ -425,7 +425,7 @@ class _CounterPageState extends State<CounterPage> {
                                 width: iconSize * 2,
                                 height: iconSize,
                                 decoration: BoxDecoration(
-                                  color: Colors.white, // 背景色
+                                  color: buttonBackgroundColor, // 背景色
                                   border: Border.all(color: buttonColor), // 縁
                                   borderRadius:
                                       BorderRadius.circular(8), // 角の設定

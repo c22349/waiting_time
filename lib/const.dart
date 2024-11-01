@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+const double buttonBorderRadius = 8.0;
 const double iconSize = 36;
 const double counterNumbersSize = 52;
 const double timerNumbersSize = 36;

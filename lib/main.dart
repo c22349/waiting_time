@@ -444,7 +444,7 @@ class _CounterPageState extends State<CounterPage> {
                                   color: buttonColor,
                                   border: Border.all(color: buttonColor), // 縁色
                                   borderRadius:
-                                      BorderRadius.circular(8), // 角の設定
+                                      BorderRadius.circular(buttonBorderRadius),
                                 ),
                                 child: const Icon(Icons.add,
                                     size: iconSize, color: Colors.white),

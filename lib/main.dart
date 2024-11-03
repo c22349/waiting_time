@@ -447,7 +447,7 @@ class _CounterPageState extends State<CounterPage> {
                                       BorderRadius.circular(buttonBorderRadius),
                                 ),
                                 child: const Icon(Icons.add,
-                                    size: iconSize, color: Colors.white),
+                                    size: iconSize, color: iconColor),
                               ),
                               onPressed: _incrementCounterFront,
                             ),

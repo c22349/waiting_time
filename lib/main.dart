@@ -123,7 +123,7 @@ class CounterPage extends StatefulWidget {
 class _CounterPageState extends State<CounterPage> {
   int _counterFront = 0;
   int _counterBehind = 0;
-  int _timer = 60;
+  int _timer = defaultTimerSeconds;
   Timer? _countdownTimer;
   late BannerAd myBanner;
 
@@ -213,7 +213,7 @@ class _CounterPageState extends State<CounterPage> {
   void _toggleTimer() {
     if (_timer == 0) {
       setState(() {
-        _timer = 60; // タイマーが0秒の場合、60秒にリセット
+        _timer = defaultTimerSeconds; // タイマーが0秒の場合、60秒にリセット
       });
     }
     if (_countdownTimer == null) {
@@ -245,7 +245,7 @@ class _CounterPageState extends State<CounterPage> {
   // void _startTimer() {
   //   _countdownTimer?.cancel();
   //   setState(() {
-  //     _timer = 60;
+  //     _timer = defaultTimerSeconds;
   //   });
   //   _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
   //     setState(() {
@@ -668,7 +668,7 @@ class _CounterPageState extends State<CounterPage> {
                                       onPressed: () {
                                         _countdownTimer?.cancel();
                                         setState(() {
-                                          _timer = 60;
+                                          _timer = defaultTimerSeconds;
                                           _countdownTimer = null;
                                         });
                                       },

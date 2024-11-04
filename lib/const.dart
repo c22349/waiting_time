@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+const int defaultTimerSeconds = 60; // タイマーの初期値・最大値(秒)
 const double buttonBorderRadius = 8.0;
 const double iconSize = 36;
 const double counterNumbersSize = 52;

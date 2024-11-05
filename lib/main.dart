@@ -257,8 +257,8 @@ class _CounterPageState extends State<CounterPage> {
   //           _startRepeatedVibration();
   //           _countdownTimer?.cancel();
   //           final player = AudioPlayer();
-  //           player.setSource(AssetSource('alarm.mp3'));
-  //           player.play(AssetSource('alarm.mp3'));
+  //           player.setSource(AssetSource(alarmAudioPath));
+  //           player.play(AssetSource(alarmAudioPath));
   //           // Android alarm time
   //           Future.delayed(const Duration(seconds: 2), () {
   //             player.stop();
@@ -273,8 +273,8 @@ class _CounterPageState extends State<CounterPage> {
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration.music());
     final player = AudioPlayer();
-    await player.setSource(AssetSource('alarm.mp3'));
-    await player.play(AssetSource('alarm.mp3'));
+    await player.setSource(AssetSource(alarmAudioPath));
+    await player.play(AssetSource(alarmAudioPath));
     // iOS alarm time
     Future.delayed(const Duration(seconds: 2), () {
       player.stop();

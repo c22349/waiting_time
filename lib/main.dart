@@ -343,7 +343,7 @@ class _CounterPageState extends State<CounterPage> {
                     width: MediaQuery.of(context).size.width * 0.96,
                     padding: EdgeInsets.all(10.0), // 内側の余白
                     decoration: BoxDecoration(
-                      color: Colors.white, // コンテナの背景色
+                      color: containerBackgroundColor, // コンテナの背景色
                       borderRadius: BorderRadius.circular(10), // 角の設定
                     ),
                     child: Column(
@@ -543,7 +543,7 @@ class _CounterPageState extends State<CounterPage> {
                                 width: iconSize * 2,
                                 height: iconSize,
                                 decoration: BoxDecoration(
-                                  color: Colors.white, // 背景色
+                                  color: containerBackgroundColor, // 背景色
                                   border: Border.all(color: buttonColor), // 縁
                                   borderRadius:
                                       BorderRadius.circular(8), // 角の設定
@@ -585,7 +585,7 @@ class _CounterPageState extends State<CounterPage> {
                           padding:
                               EdgeInsets.fromLTRB(0, 10.0, 0, 16.0), // 内側の余白
                           decoration: BoxDecoration(
-                            color: Colors.white, // コンテナの背景色
+                            color: containerBackgroundColor, // コンテナの背景色
                             borderRadius: BorderRadius.circular(10), // 角丸の設定
                           ),
                           child: Column(
@@ -685,7 +685,7 @@ class _CounterPageState extends State<CounterPage> {
                           padding:
                               EdgeInsets.fromLTRB(0, 10.0, 0, 30.0), // 内側の余白
                           decoration: BoxDecoration(
-                            color: Colors.white, // コンテナの背景色
+                            color: containerBackgroundColor, // コンテナの背景色
                             borderRadius: BorderRadius.circular(10), // 角丸の設定
                           ),
                           child: Column(

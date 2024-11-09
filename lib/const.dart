@@ -12,4 +12,5 @@ const Color buttonColor = Color(0xFF5C5862);
 const Color buttonBackgroundColor = Colors.white; // ボタンの背景色
 const Color containerBackgroundColor = Colors.white; // コンテナの背景色
 const Color iconColor = Colors.white; // アイコンの色
+const Color textColor = Colors.black; // テキストの色
 const String alarmAudioPath = 'alarm.mp3'; // オーディオファイルのパス

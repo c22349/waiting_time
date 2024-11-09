@@ -764,7 +764,7 @@ class _CounterPageState extends State<CounterPage> {
                                                 text: '${minutes}',
                                                 style: TextStyle(
                                                     fontSize: resultNumbersSize,
-                                                    color: Colors.black),
+                                                    color: textColor),
                                               ),
                                               TextSpan(
                                                 text: AppLocalizations.of(
@@ -773,7 +773,7 @@ class _CounterPageState extends State<CounterPage> {
                                                 style: TextStyle(
                                                     fontSize:
                                                         calculationFontSize,
-                                                    color: Colors.black),
+                                                    color: textColor),
                                               ),
                                               if (seconds > 0) ...[
                                                 TextSpan(
@@ -781,7 +781,7 @@ class _CounterPageState extends State<CounterPage> {
                                                   style: TextStyle(
                                                       fontSize:
                                                           resultNumbersSize,
-                                                      color: Colors.black),
+                                                      color: textColor),
                                                 ),
                                                 TextSpan(
                                                   text: AppLocalizations.of(
@@ -790,7 +790,7 @@ class _CounterPageState extends State<CounterPage> {
                                                   style: TextStyle(
                                                       fontSize:
                                                           calculationFontSize,
-                                                      color: Colors.black),
+                                                      color: textColor),
                                                 ),
                                               ],
                                               TextSpan(
@@ -799,7 +799,7 @@ class _CounterPageState extends State<CounterPage> {
                                                 style: TextStyle(
                                                     fontSize:
                                                         SupplementFontSize,
-                                                    color: Colors.black),
+                                                    color: textColor),
                                               ),
                                             ],
                                           ),

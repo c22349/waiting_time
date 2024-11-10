@@ -20,6 +20,7 @@ import 'firebase_options.dart';
 import 'function/version_check_service.dart';
 import 'view/admob_helper.dart';
 import 'view/counter_dialog.dart';
+import 'view/result_dialog.dart';
 import 'view/settings.dart';
 import 'view/update_prompt_dialog.dart';
 import 'viewmodel/setting_model.dart';
@@ -303,12 +304,12 @@ class _CounterPageState extends State<CounterPage> {
     // 現在のロケールを取得
     Locale locale = Localizations.localeOf(context);
     // ロケールに基づいてフォントサイズを設定
-    double titleFontSize = locale.languageCode == 'ja' ? 22.0 : 20.0;
-    double bodyFontSize = locale.languageCode == 'ja' ? 20.0 : 16.0;
-    double dialogFontSize = locale.languageCode == 'ja' ? 18.0 : 16.0;
-    double calculationFontSize = locale.languageCode == 'ja' ? 20.0 : 18.0;
-    double SupplementFontSize = locale.languageCode == 'ja' ? 16.0 : 16.0;
-    double closeFontSize = locale.languageCode == 'ja' ? 20.0 : 18.0;
+    double titleFontSize = getTitleFontSize(locale.languageCode);
+    double bodyFontSize = getBodyFontSize(locale.languageCode);
+    double dialogFontSize = getDialogFontSize(locale.languageCode);
+    double calculationFontSize = getCalculationFontSize(locale.languageCode);
+    double SupplementFontSize = getSupplementFontSize(locale.languageCode);
+    double closeFontSize = getCloseFontSize(locale.languageCode);
 
     return Scaffold(
       appBar: AppBar(
@@ -828,6 +829,7 @@ class _CounterPageState extends State<CounterPage> {
                       ],
                     ),
                   ),
+                  // バナーのスペース
                   SizedBox(height: 24),
                   Container(
                     width: AdSize.fullBanner.width.toDouble(),

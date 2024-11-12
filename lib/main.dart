@@ -307,9 +307,11 @@ class _CounterPageState extends State<CounterPage> {
     double titleFontSize = getTitleFontSize(locale.languageCode);
     double bodyFontSize = getBodyFontSize(locale.languageCode);
     double dialogFontSize = getDialogFontSize(locale.languageCode);
-    double calculationFontSize = getCalculationFontSize(locale.languageCode);
-    double SupplementFontSize = getSupplementFontSize(locale.languageCode);
-    double closeFontSize = getCloseFontSize(locale.languageCode);
+
+    // 利用していない可能性あり、一時コメントアウト
+    // double calculationFontSize = getCalculationFontSize(locale.languageCode);
+    // double SupplementFontSize = getSupplementFontSize(locale.languageCode);
+    // double closeFontSize = getCloseFontSize(locale.languageCode);
 
     return Scaffold(
       appBar: AppBar(
@@ -705,122 +707,8 @@ class _CounterPageState extends State<CounterPage> {
                                     size: iconSize * 1.6),
                                 onPressed: () {
                                   // 計算結果を出力
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      double result = 0;
-                                      if (_counterBehind != 0) {
-                                        result = _counterFront / _counterBehind;
-                                      } else {
-                                        // line_behindが0の場合
-                                        return AlertDialog(
-                                          title: Text(
-                                            AppLocalizations.of(context)!
-                                                .estimated_waiting_time,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          content: Text(
-                                            AppLocalizations.of(context)!
-                                                .incomputable,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: noResultFontSize),
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              child: Text(
-                                                AppLocalizations.of(context)!
-                                                    .close,
-                                                style:
-                                                    TextStyle(fontSize: 20.0),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                      int minutes = result.floor();
-                                      int seconds =
-                                          ((result - minutes) * 60).round();
-                                      // 30秒単位に切り上げる処理
-                                      if (seconds > 0 && seconds < 30) {
-                                        seconds = 30;
-                                      } else if (seconds > 30) {
-                                        seconds = 0;
-                                        minutes += 1;
-                                      }
-                                      return AlertDialog(
-                                        title: Text(
-                                          AppLocalizations.of(context)!
-                                              .estimated_waiting_time,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        content: RichText(
-                                          textAlign: TextAlign.center,
-                                          text: TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: '${minutes}',
-                                                style: TextStyle(
-                                                    fontSize: resultNumbersSize,
-                                                    color: textColor),
-                                              ),
-                                              TextSpan(
-                                                text: AppLocalizations.of(
-                                                        context)!
-                                                    .minute,
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        calculationFontSize,
-                                                    color: textColor),
-                                              ),
-                                              if (seconds > 0) ...[
-                                                TextSpan(
-                                                  text: '${seconds}',
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          resultNumbersSize,
-                                                      color: textColor),
-                                                ),
-                                                TextSpan(
-                                                  text: AppLocalizations.of(
-                                                          context)!
-                                                      .seconds,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          calculationFontSize,
-                                                      color: textColor),
-                                                ),
-                                              ],
-                                              TextSpan(
-                                                text:
-                                                    '\n\n\n${AppLocalizations.of(context)!.calculation_supplement}',
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        SupplementFontSize,
-                                                    color: textColor),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .close,
-                                              style: TextStyle(
-                                                  fontSize: closeFontSize),
-                                            ),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
+                                  showResultDialog(
+                                      context, _counterFront, _counterBehind);
                                 },
                               ),
                             ],

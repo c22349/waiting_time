@@ -307,9 +307,11 @@ class _CounterPageState extends State<CounterPage> {
     double titleFontSize = getTitleFontSize(locale.languageCode);
     double bodyFontSize = getBodyFontSize(locale.languageCode);
     double dialogFontSize = getDialogFontSize(locale.languageCode);
-    double calculationFontSize = getCalculationFontSize(locale.languageCode);
-    double SupplementFontSize = getSupplementFontSize(locale.languageCode);
-    double closeFontSize = getCloseFontSize(locale.languageCode);
+
+    // 利用していない可能性あり、一時コメントアウト
+    // double calculationFontSize = getCalculationFontSize(locale.languageCode);
+    // double SupplementFontSize = getSupplementFontSize(locale.languageCode);
+    // double closeFontSize = getCloseFontSize(locale.languageCode);
 
     return Scaffold(
       appBar: AppBar(

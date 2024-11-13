@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:audio_session/audio_session.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+// import 'package:auto_size_text/auto_size_text.dart'; // 使用していない可能性あり
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +22,7 @@ import 'view/admob_helper.dart';
 import 'view/counter_dialog.dart';
 import 'view/result_dialog.dart';
 import 'view/settings.dart';
+import 'view/timer_widget.dart';
 import 'view/update_prompt_dialog.dart';
 import 'viewmodel/setting_model.dart';
 
@@ -583,104 +584,21 @@ class _CounterPageState extends State<CounterPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.56,
-                          padding:
-                              EdgeInsets.fromLTRB(0, 10.0, 0, 16.0), // 内側の余白
-                          decoration: BoxDecoration(
-                            color: containerBackgroundColor, // コンテナの背景色
-                            borderRadius: BorderRadius.circular(10), // 角丸の設定
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text.rich(
-                                TextSpan(
-                                  children: <InlineSpan>[
-                                    TextSpan(
-                                      text:
-                                          '${AppLocalizations.of(context)!.minute_timer} \n',
-                                      style: TextStyle(
-                                          fontSize: bodyFontSize,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                    WidgetSpan(
-                                      child: SizedBox(height: 60),
-                                    ),
-                                    WidgetSpan(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          AutoSizeText(
-                                            '$_timer', // タイマーの値
-                                            style: TextStyle(
-                                              fontSize: timerNumbersSize,
-                                              fontFeatures: [
-                                                FontFeature.tabularFigures()
-                                              ],
-                                            ),
-                                            maxLines: 1,
-                                            minFontSize: 10,
-                                            maxFontSize: 30,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    WidgetSpan(
-                                      child: Transform.translate(
-                                        offset: Offset(0, -6),
-                                        child: Container(
-                                          width: 30,
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                ' ${AppLocalizations.of(context)!.heading_seconds}',
-                                                style: TextStyle(
-                                                    fontSize: bodyFontSize),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Transform.translate(
-                                    offset: Offset(-1, 0),
-                                    child: IconButton(
-                                      icon: Icon(
-                                          _countdownTimer == null
-                                              ? Icons.play_arrow
-                                              : Icons.pause,
-                                          size: iconSize * 1.2),
-                                      onPressed: _toggleTimer,
-                                    ),
-                                  ),
-                                  SizedBox(width: 3),
-                                  Transform.translate(
-                                    offset: Offset(-1, 0),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.replay,
-                                          size: iconSize * 1.2),
-                                      onPressed: () {
-                                        _countdownTimer?.cancel();
-                                        setState(() {
-                                          _timer = defaultTimerSeconds;
-                                          _countdownTimer = null;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                        TimerWidget(
+                          timer: _timer,
+                          countdownTimer: _countdownTimer,
+                          bodyFontSize: bodyFontSize,
+                          timerNumbersSize: timerNumbersSize,
+                          iconSize: iconSize,
+                          containerBackgroundColor: containerBackgroundColor,
+                          toggleTimer: _toggleTimer,
+                          resetTimer: () {
+                            _countdownTimer?.cancel();
+                            setState(() {
+                              _timer = defaultTimerSeconds;
+                              _countdownTimer = null;
+                            });
+                          },
                         ),
                         SizedBox(width: 0),
                         Container(

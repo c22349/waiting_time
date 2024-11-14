@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 // 使用していない可能性あり(Android側未検証)
@@ -19,8 +18,8 @@ import 'const.dart';
 import 'firebase_options.dart';
 import 'function/version_check_service.dart';
 import 'view/admob_helper.dart';
+import 'view/calculate_button.dart';
 import 'view/counter_dialog.dart';
-import 'view/result_dialog.dart';
 import 'view/settings.dart';
 import 'view/timer_widget.dart';
 import 'view/update_prompt_dialog.dart';
@@ -601,36 +600,13 @@ class _CounterPageState extends State<CounterPage> {
                           },
                         ),
                         SizedBox(width: 0),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.36,
-                          padding:
-                              EdgeInsets.fromLTRB(0, 10.0, 0, 30.0), // 内側の余白
-                          decoration: BoxDecoration(
-                            color: containerBackgroundColor, // コンテナの背景色
-                            borderRadius: BorderRadius.circular(10), // 角丸の設定
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                '${AppLocalizations.of(context)!.calculate}',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: bodyFontSize,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              SizedBox(height: 32),
-                              IconButton(
-                                icon: Icon(FontAwesomeIcons.calculator,
-                                    size: iconSize * 1.6),
-                                onPressed: () {
-                                  // 計算結果を出力
-                                  showResultDialog(
-                                      context, _counterFront, _counterBehind);
-                                },
-                              ),
-                            ],
-                          ),
+                        // 計算ボタン部分
+                        CalculateButton(
+                          bodyFontSize: bodyFontSize,
+                          iconSize: iconSize,
+                          containerBackgroundColor: containerBackgroundColor,
+                          counterFront: _counterFront,
+                          counterBehind: _counterBehind,
                         ),
                       ],
                     ),

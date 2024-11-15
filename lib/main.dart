@@ -19,6 +19,7 @@ import 'firebase_options.dart';
 import 'function/version_check_service.dart';
 import 'view/admob_helper.dart';
 import 'view/calculate_button.dart';
+import 'view/counter_behind.dart';
 import 'view/counter_dialog.dart';
 import 'view/settings.dart';
 import 'view/timer_widget.dart';
@@ -342,6 +343,7 @@ class _CounterPageState extends State<CounterPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(height: 10), // 上部のスペースを調整
+                  // 前に並んでいる人数の部分
                   Container(
                     width: MediaQuery.of(context).size.width * 0.96,
                     padding: EdgeInsets.all(10.0), // 内側の余白
@@ -460,122 +462,20 @@ class _CounterPageState extends State<CounterPage> {
                     ),
                   ),
                   SizedBox(height: 12),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.96,
-                    padding: EdgeInsets.all(10.0), // 内側の余白
-                    decoration: BoxDecoration(
-                      color: containerBackgroundColor, // コンテナの背景色
-                      borderRadius: BorderRadius.circular(10), // 角の設定
-                    ),
-                    child: Column(
-                      children: [
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            style: DefaultTextStyle.of(context).style,
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text:
-                                    '${AppLocalizations.of(context)!.line_behind}',
-                                style: TextStyle(
-                                    fontSize: bodyFontSize,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Container(
-                                width: iconSize * 2,
-                                height: iconSize,
-                                child: Icon(Icons.replay, size: iconSize),
-                              ),
-                              onPressed: _resetCounterBehind,
-                            ),
-                            Container(
-                              width: iconSize * 2,
-                              height: iconSize * 2,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: <Widget>[
-                                  OverflowBox(
-                                    minWidth: 0.0,
-                                    maxWidth: double.infinity,
-                                    minHeight: 0.0,
-                                    maxHeight: double.infinity,
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        String? newValue =
-                                            await showCounterDialog(
-                                          context,
-                                          _counterBehindController,
-                                          AppLocalizations.of(context)!
-                                              .line_behind_dialog,
-                                          dialogFontSize,
-                                        );
-                                        if (newValue != null) {
-                                          _updateCounterBehind(newValue);
-                                        }
-                                      },
-                                      child: Text(
-                                        '$_counterBehind',
-                                        style: TextStyle(
-                                          fontSize: counterNumbersSize,
-                                          fontFeatures: [
-                                            FontFeature.tabularFigures()
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                                width: iconSize * 2, height: iconSize),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Container(
-                                width: iconSize * 2,
-                                height: iconSize,
-                                decoration: BoxDecoration(
-                                  color: containerBackgroundColor, // 背景色
-                                  border: Border.all(color: buttonColor), // 縁
-                                  borderRadius:
-                                      BorderRadius.circular(8), // 角の設定
-                                ),
-                                child: const Icon(Icons.remove, size: iconSize),
-                              ),
-                              onPressed: _decrementCounterBehind,
-                            ),
-                            const SizedBox(
-                                width: iconSize * 2, height: iconSize),
-                            IconButton(
-                              icon: Container(
-                                width: iconSize * 2,
-                                height: iconSize,
-                                decoration: BoxDecoration(
-                                  color: buttonColor,
-                                  border: Border.all(color: buttonColor), // 縁色
-                                  borderRadius:
-                                      BorderRadius.circular(8), // 角の設定
-                                ),
-                                child: const Icon(Icons.add,
-                                    size: iconSize, color: Colors.white),
-                              ),
-                              onPressed: _incrementCounterBehind,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  // 後ろに並んだ人数の部分
+                  CounterBehind(
+                    counterBehind: _counterBehind,
+                    bodyFontSize: bodyFontSize,
+                    counterNumbersSize: counterNumbersSize,
+                    iconSize: iconSize,
+                    dialogFontSize: dialogFontSize,
+                    containerBackgroundColor: containerBackgroundColor,
+                    buttonColor: buttonColor,
+                    counterBehindController: _counterBehindController,
+                    updateCounterBehind: _updateCounterBehind,
+                    resetCounterBehind: _resetCounterBehind,
+                    decrementCounterBehind: _decrementCounterBehind,
+                    incrementCounterBehind: _incrementCounterBehind,
                   ),
                   SizedBox(height: 12),
                   Container(
@@ -583,6 +483,7 @@ class _CounterPageState extends State<CounterPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        //タイマー部分
                         TimerWidget(
                           timer: _timer,
                           countdownTimer: _countdownTimer,
@@ -600,7 +501,7 @@ class _CounterPageState extends State<CounterPage> {
                           },
                         ),
                         SizedBox(width: 0),
-                        // 計算ボタン部分
+                        // 計算ボタンの部分
                         CalculateButton(
                           bodyFontSize: bodyFontSize,
                           iconSize: iconSize,
@@ -611,7 +512,7 @@ class _CounterPageState extends State<CounterPage> {
                       ],
                     ),
                   ),
-                  // バナーのスペース
+                  // バナー部分
                   SizedBox(height: 24),
                   Container(
                     width: AdSize.fullBanner.width.toDouble(),

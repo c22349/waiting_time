@@ -21,6 +21,7 @@ import 'view/admob_helper.dart';
 import 'view/calculate_button.dart';
 import 'view/counter_behind.dart';
 import 'view/counter_dialog.dart';
+import 'view/counter_front.dart';
 import 'view/settings.dart';
 import 'view/timer_widget.dart';
 import 'view/update_prompt_dialog.dart';
@@ -32,30 +33,6 @@ import 'viewmodel/setting_model.dart';
 //   final languageCode = prefs.getString('language') ?? 'ja';
 //   return Locale(languageCode, '');
 // }
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]).then((_) async {
-    final settingModel = SettingModel();
-    await settingModel.loadLocale(); // 言語設定を読み込む
-    runApp(
-      ChangeNotifierProvider<SettingModel>(
-        create: (context) => settingModel,
-        child: Consumer<SettingModel>(
-          builder: (context, model, child) {
-            return MyApp(locale: model.currentLocale);
-          },
-        ),
-      ),
-    );
-  });
-}
 
 class MyApp extends StatelessWidget {
   MyApp({required this.locale});
@@ -343,126 +320,23 @@ class _CounterPageState extends State<CounterPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(height: 10), // 上部のスペースを調整
-                  // 前に並んでいる人数の部分
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.96,
-                    padding: EdgeInsets.all(10.0), // 内側の余白
-                    decoration: BoxDecoration(
-                      color: containerBackgroundColor, // コンテナの背景色
-                      borderRadius: BorderRadius.circular(10), // 角の設定
-                    ),
-                    child: Column(
-                      children: [
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            style: DefaultTextStyle.of(context).style,
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text:
-                                    '${AppLocalizations.of(context)!.line_in_front_of}',
-                                style: TextStyle(
-                                    fontSize: bodyFontSize,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Container(
-                                width: iconSize * 2,
-                                height: iconSize,
-                                child: Icon(Icons.replay, size: iconSize),
-                              ),
-                              onPressed: _resetCounterFront,
-                            ),
-                            Container(
-                              width: iconSize * 2,
-                              height: iconSize * 2,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: <Widget>[
-                                  OverflowBox(
-                                    minWidth: 0.0,
-                                    maxWidth: double.infinity,
-                                    minHeight: 0.0,
-                                    maxHeight: double.infinity,
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        String? newValue =
-                                            await showCounterDialog(
-                                          context,
-                                          _counterFrontController,
-                                          AppLocalizations.of(context)!
-                                              .line_in_front_of_dialog,
-                                          dialogFontSize,
-                                        );
-                                        if (newValue != null) {
-                                          _updateCounterFront(newValue);
-                                        }
-                                      },
-                                      child: Text(
-                                        '$_counterFront',
-                                        style: TextStyle(
-                                          fontSize: counterNumbersSize,
-                                          fontFeatures: [
-                                            FontFeature.tabularFigures()
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                                width: iconSize * 2, height: iconSize),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Container(
-                                width: iconSize * 2,
-                                height: iconSize,
-                                decoration: BoxDecoration(
-                                  color: buttonBackgroundColor, // 背景色
-                                  border: Border.all(color: buttonColor), // 縁
-                                  borderRadius:
-                                      BorderRadius.circular(8), // 角の設定
-                                ),
-                                child: const Icon(Icons.remove, size: iconSize),
-                              ),
-                              onPressed: _decrementCounterFront,
-                            ),
-                            const SizedBox(
-                                width: iconSize * 2, height: iconSize),
-                            IconButton(
-                              icon: Container(
-                                width: iconSize * 2,
-                                height: iconSize,
-                                decoration: BoxDecoration(
-                                  color: buttonColor,
-                                  border: Border.all(color: buttonColor), // 縁色
-                                  borderRadius:
-                                      BorderRadius.circular(buttonBorderRadius),
-                                ),
-                                child: const Icon(Icons.add,
-                                    size: iconSize, color: iconColor),
-                              ),
-                              onPressed: _incrementCounterFront,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  // 前に並んでいる人数(1段目)
+                  CounterFront(
+                    counterFront: _counterFront,
+                    bodyFontSize: bodyFontSize,
+                    counterNumbersSize: counterNumbersSize,
+                    iconSize: iconSize,
+                    dialogFontSize: dialogFontSize,
+                    containerBackgroundColor: containerBackgroundColor,
+                    buttonColor: buttonColor,
+                    counterFrontController: _counterFrontController,
+                    updateCounterFront: _updateCounterFront,
+                    resetCounterFront: _resetCounterFront,
+                    decrementCounterFront: _decrementCounterFront,
+                    incrementCounterFront: _incrementCounterFront,
                   ),
                   SizedBox(height: 12),
-                  // 後ろに並んだ人数の部分
+                  // 後ろに並んだ人数(2段目)
                   CounterBehind(
                     counterBehind: _counterBehind,
                     bodyFontSize: bodyFontSize,
@@ -478,6 +352,7 @@ class _CounterPageState extends State<CounterPage> {
                     incrementCounterBehind: _incrementCounterBehind,
                   ),
                   SizedBox(height: 12),
+                  // タイマー&計算ボタン(3段目)
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -529,4 +404,28 @@ class _CounterPageState extends State<CounterPage> {
       ),
     );
   }
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) async {
+    final settingModel = SettingModel();
+    await settingModel.loadLocale(); // 言語設定を読み込む
+    runApp(
+      ChangeNotifierProvider<SettingModel>(
+        create: (context) => settingModel,
+        child: Consumer<SettingModel>(
+          builder: (context, model, child) {
+            return MyApp(locale: model.currentLocale);
+          },
+        ),
+      ),
+    );
+  });
 }

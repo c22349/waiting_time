@@ -20,12 +20,12 @@ import 'function/version_check_service.dart';
 import 'view/admob_helper.dart';
 import 'view/calculate_button.dart';
 import 'view/counter_behind.dart';
-import 'view/counter_dialog.dart';
 import 'view/counter_front.dart';
 import 'view/settings.dart';
 import 'view/timer_widget.dart';
 import 'view/update_prompt_dialog.dart';
 import 'viewmodel/setting_model.dart';
+import 'viewmodel/counter_model.dart';
 
 // 使用していない可能性あり(Android側未検証)
 // Future<Locale> loadLocale() async {
@@ -100,22 +100,9 @@ class CounterPage extends StatefulWidget {
 }
 
 class _CounterPageState extends State<CounterPage> {
-  int _counterFront = 0;
-  int _counterBehind = 0;
   int _timer = defaultTimerSeconds;
   Timer? _countdownTimer;
   late BannerAd myBanner;
-
-  final TextEditingController _counterFrontController = TextEditingController();
-  final TextEditingController _counterBehindController =
-      TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _counterFrontController.text = '$_counterFront';
-    _counterBehindController.text = '$_counterBehind';
-  }
 
   @override
   void didChangeDependencies() {
@@ -137,56 +124,6 @@ class _CounterPageState extends State<CounterPage> {
   AdSize _getAdSize() {
     final width = MediaQuery.of(context).size.width.toInt();
     return AdSize(width: width, height: 60);
-  }
-
-  void _updateCounterFront(String value) {
-    setState(() {
-      _counterFront = int.tryParse(value) ?? _counterFront;
-      _counterFrontController.text = '$_counterFront';
-    });
-  }
-
-  void _updateCounterBehind(String value) {
-    setState(() {
-      _counterBehind = int.tryParse(value) ?? _counterBehind;
-      _counterBehindController.text = '$_counterBehind';
-    });
-  }
-
-  void _incrementCounterFront() {
-    setState(() {
-      _counterFront++;
-    });
-  }
-
-  void _decrementCounterFront() {
-    setState(() {
-      if (_counterFront > 0) _counterFront--;
-    });
-  }
-
-  void _resetCounterFront() {
-    setState(() {
-      _counterFront = 0;
-    });
-  }
-
-  void _incrementCounterBehind() {
-    setState(() {
-      _counterBehind++;
-    });
-  }
-
-  void _decrementCounterBehind() {
-    setState(() {
-      if (_counterBehind > 0) _counterBehind--;
-    });
-  }
-
-  void _resetCounterBehind() {
-    setState(() {
-      _counterBehind = 0;
-    });
   }
 
   void _toggleTimer() {
@@ -279,129 +216,131 @@ class _CounterPageState extends State<CounterPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 現在のロケールを取得
-    Locale locale = Localizations.localeOf(context);
-    // ロケールに基づいてフォントサイズを設定
-    double titleFontSize = getTitleFontSize(locale.languageCode);
-    double bodyFontSize = getBodyFontSize(locale.languageCode);
-    double dialogFontSize = getDialogFontSize(locale.languageCode);
+    return Consumer<CounterModel>(
+      builder: (context, counterModel, child) {
+        // 現在のロケールを取得
+        Locale locale = Localizations.localeOf(context);
+        double titleFontSize = getTitleFontSize(locale.languageCode);
+        double bodyFontSize = getBodyFontSize(locale.languageCode);
+        double dialogFontSize = getDialogFontSize(locale.languageCode);
 
-    // 利用していない可能性あり、一時コメントアウト
-    // double calculationFontSize = getCalculationFontSize(locale.languageCode);
-    // double SupplementFontSize = getSupplementFontSize(locale.languageCode);
-    // double closeFontSize = getCloseFontSize(locale.languageCode);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context)!.main_title,
-          style: TextStyle(fontSize: titleFontSize),
-        ),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => SettingPage()),
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              AppLocalizations.of(context)!.main_title,
+              style: TextStyle(fontSize: titleFontSize),
+            ),
+            centerTitle: true,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SettingPage()),
+                  );
+                },
+              ),
+            ],
+          ),
+          body: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 10), // 上部のスペースを調整
+                      // 前に並んでいる人数(1段目)
+                      CounterFront(
+                        counterFront: counterModel.counterFront,
+                        bodyFontSize: bodyFontSize,
+                        counterNumbersSize: counterNumbersSize,
+                        iconSize: iconSize,
+                        dialogFontSize: dialogFontSize,
+                        containerBackgroundColor: containerBackgroundColor,
+                        buttonColor: buttonColor,
+                        counterFrontController:
+                            counterModel.counterFrontController,
+                        updateCounterFront: counterModel.updateCounterFront,
+                        resetCounterFront: counterModel.resetFront,
+                        decrementCounterFront: counterModel.decrementFront,
+                        incrementCounterFront: counterModel.incrementFront,
+                      ),
+                      SizedBox(height: 12),
+                      // 後ろに並んだ人数(2段目)
+                      CounterBehind(
+                        counterBehind: counterModel.counterBehind,
+                        bodyFontSize: bodyFontSize,
+                        counterNumbersSize: counterNumbersSize,
+                        iconSize: iconSize,
+                        dialogFontSize: dialogFontSize,
+                        containerBackgroundColor: containerBackgroundColor,
+                        buttonColor: buttonColor,
+                        counterBehindController:
+                            counterModel.counterBehindController,
+                        updateCounterBehind: counterModel.updateCounterBehind,
+                        resetCounterBehind: counterModel.resetBehind,
+                        decrementCounterBehind: counterModel.decrementBehind,
+                        incrementCounterBehind: counterModel.incrementBehind,
+                      ),
+                      SizedBox(height: 12),
+                      // タイマー&計算ボタン(3段目)
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //タイマー部分
+                            TimerWidget(
+                              timer: _timer,
+                              countdownTimer: _countdownTimer,
+                              bodyFontSize: bodyFontSize,
+                              timerNumbersSize: timerNumbersSize,
+                              iconSize: iconSize,
+                              containerBackgroundColor:
+                                  containerBackgroundColor,
+                              toggleTimer: _toggleTimer,
+                              resetTimer: () {
+                                _countdownTimer?.cancel();
+                                setState(() {
+                                  _timer = defaultTimerSeconds;
+                                  _countdownTimer = null;
+                                });
+                              },
+                            ),
+                            SizedBox(width: 0),
+                            // 計算ボタンの部分
+                            CalculateButton(
+                              bodyFontSize: bodyFontSize,
+                              iconSize: iconSize,
+                              containerBackgroundColor:
+                                  containerBackgroundColor,
+                              counterFront: counterModel.counterFront,
+                              counterBehind: counterModel.counterBehind,
+                            ),
+                          ],
+                        ),
+                      ),
+                      // バナー部分
+                      SizedBox(height: 24),
+                      Container(
+                        width: AdSize.fullBanner.width.toDouble(),
+                        height: AdSize.fullBanner.height.toDouble(),
+                        alignment: Alignment.center,
+                        child: AdWidget(ad: myBanner),
+                      ),
+                      const SafeArea(child: SizedBox.shrink()),
+                    ],
+                  ),
+                ),
               );
             },
           ),
-        ],
-      ),
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 10), // 上部のスペースを調整
-                  // 前に並んでいる人数(1段目)
-                  CounterFront(
-                    counterFront: _counterFront,
-                    bodyFontSize: bodyFontSize,
-                    counterNumbersSize: counterNumbersSize,
-                    iconSize: iconSize,
-                    dialogFontSize: dialogFontSize,
-                    containerBackgroundColor: containerBackgroundColor,
-                    buttonColor: buttonColor,
-                    counterFrontController: _counterFrontController,
-                    updateCounterFront: _updateCounterFront,
-                    resetCounterFront: _resetCounterFront,
-                    decrementCounterFront: _decrementCounterFront,
-                    incrementCounterFront: _incrementCounterFront,
-                  ),
-                  SizedBox(height: 12),
-                  // 後ろに並んだ人数(2段目)
-                  CounterBehind(
-                    counterBehind: _counterBehind,
-                    bodyFontSize: bodyFontSize,
-                    counterNumbersSize: counterNumbersSize,
-                    iconSize: iconSize,
-                    dialogFontSize: dialogFontSize,
-                    containerBackgroundColor: containerBackgroundColor,
-                    buttonColor: buttonColor,
-                    counterBehindController: _counterBehindController,
-                    updateCounterBehind: _updateCounterBehind,
-                    resetCounterBehind: _resetCounterBehind,
-                    decrementCounterBehind: _decrementCounterBehind,
-                    incrementCounterBehind: _incrementCounterBehind,
-                  ),
-                  SizedBox(height: 12),
-                  // タイマー&計算ボタン(3段目)
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //タイマー部分
-                        TimerWidget(
-                          timer: _timer,
-                          countdownTimer: _countdownTimer,
-                          bodyFontSize: bodyFontSize,
-                          timerNumbersSize: timerNumbersSize,
-                          iconSize: iconSize,
-                          containerBackgroundColor: containerBackgroundColor,
-                          toggleTimer: _toggleTimer,
-                          resetTimer: () {
-                            _countdownTimer?.cancel();
-                            setState(() {
-                              _timer = defaultTimerSeconds;
-                              _countdownTimer = null;
-                            });
-                          },
-                        ),
-                        SizedBox(width: 0),
-                        // 計算ボタンの部分
-                        CalculateButton(
-                          bodyFontSize: bodyFontSize,
-                          iconSize: iconSize,
-                          containerBackgroundColor: containerBackgroundColor,
-                          counterFront: _counterFront,
-                          counterBehind: _counterBehind,
-                        ),
-                      ],
-                    ),
-                  ),
-                  // バナー部分
-                  SizedBox(height: 24),
-                  Container(
-                    width: AdSize.fullBanner.width.toDouble(),
-                    height: AdSize.fullBanner.height.toDouble(),
-                    alignment: Alignment.center,
-                    child: AdWidget(ad: myBanner),
-                  ),
-                  const SafeArea(child: SizedBox.shrink()),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+        );
+      },
     );
   }
 }
@@ -418,8 +357,11 @@ void main() async {
     final settingModel = SettingModel();
     await settingModel.loadLocale(); // 言語設定を読み込む
     runApp(
-      ChangeNotifierProvider<SettingModel>(
-        create: (context) => settingModel,
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<SettingModel>(create: (_) => settingModel),
+          ChangeNotifierProvider<CounterModel>(create: (_) => CounterModel()),
+        ],
         child: Consumer<SettingModel>(
           builder: (context, model, child) {
             return MyApp(locale: model.currentLocale);

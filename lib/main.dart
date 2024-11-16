@@ -1,6 +1,6 @@
-import 'dart:async';
-import 'package:audio_session/audio_session.dart';
-import 'package:audioplayers/audioplayers.dart';
+// import 'dart:async';
+// import 'package:audio_session/audio_session.dart';
+// import 'package:audioplayers/audioplayers.dart';
 // import 'package:auto_size_text/auto_size_text.dart'; // 使用していない可能性あり
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 // 使用していない可能性あり(Android側未検証)
 // import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vibration/vibration.dart';
+// import 'package:vibration/vibration.dart';
 
 // 読み込みファイル
 import 'const.dart';
@@ -24,8 +24,9 @@ import 'view/counter_front.dart';
 import 'view/settings.dart';
 import 'view/timer_widget.dart';
 import 'view/update_prompt_dialog.dart';
-import 'viewmodel/setting_model.dart';
 import 'viewmodel/counter_model.dart';
+import 'viewmodel/setting_model.dart';
+import 'viewmodel/timer_model.dart';
 
 // 使用していない可能性あり(Android側未検証)
 // Future<Locale> loadLocale() async {
@@ -100,8 +101,6 @@ class CounterPage extends StatefulWidget {
 }
 
 class _CounterPageState extends State<CounterPage> {
-  int _timer = defaultTimerSeconds;
-  Timer? _countdownTimer;
   late BannerAd myBanner;
 
   @override
@@ -126,99 +125,10 @@ class _CounterPageState extends State<CounterPage> {
     return AdSize(width: width, height: 60);
   }
 
-  void _toggleTimer() {
-    if (_timer == 0) {
-      setState(() {
-        _timer = defaultTimerSeconds; // タイマーが0秒の場合、60秒にリセット
-      });
-    }
-    if (_countdownTimer == null) {
-      _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        setState(() {
-          if (_timer > 0) {
-            _timer--;
-          } else {
-            _countdownTimer?.cancel();
-            _countdownTimer = null;
-            if (Provider.of<SettingModel>(context, listen: false)
-                .soundEnabled) {
-              // スイッチがONの場合のみアラームを鳴らす
-              _playAlarm();
-            }
-            _startRepeatedVibration();
-          }
-        });
-      });
-    } else {
-      _countdownTimer?.cancel();
-      setState(() {
-        _countdownTimer = null;
-      });
-    }
-  }
-
-  // Androidで利用している可能性あり
-  // void _startTimer() {
-  //   _countdownTimer?.cancel();
-  //   setState(() {
-  //     _timer = defaultTimerSeconds;
-  //   });
-  //   _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     setState(() {
-  //       if (_timer > 0) {
-  //         _timer--;
-  //       } else {
-  //         if (Provider.of<SettingModel>(context, listen: false).soundEnabled) {
-  //           // スイッチがONの場合のみアラームを鳴らす
-  //           _startRepeatedVibration();
-  //           _countdownTimer?.cancel();
-  //           final player = AudioPlayer();
-  //           player.setSource(AssetSource(alarmAudioPath));
-  //           player.play(AssetSource(alarmAudioPath));
-  //           // Android alarm time
-  //           Future.delayed(const Duration(seconds: 2), () {
-  //             player.stop();
-  //           });
-  //         }
-  //       }
-  //     });
-  //   });
-  // }
-
-  void _playAlarm() async {
-    final session = await AudioSession.instance;
-    await session.configure(AudioSessionConfiguration.music());
-    final player = AudioPlayer();
-    await player.setSource(AssetSource(alarmAudioPath));
-    await player.play(AssetSource(alarmAudioPath));
-    // iOS alarm time
-    Future.delayed(const Duration(seconds: 2), () {
-      player.stop();
-    });
-  }
-
-  void _startRepeatedVibration() {
-    Vibration.vibrate(duration: 250);
-    Timer.periodic(const Duration(seconds: 1), (Timer vibrationOrder) {
-      if (vibrationOrder.tick < 2) {
-        Vibration.vibrate(duration: 250);
-      } else {
-        vibrationOrder.cancel();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _countdownTimer?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<CounterModel>(
-      builder: (context, counterModel, child) {
-        // 現在のロケールを取得
+    return Consumer3<CounterModel, TimerModel, SettingModel>(
+      builder: (context, counterModel, timerModel, settingModel, child) {
         Locale locale = Localizations.localeOf(context);
         double titleFontSize = getTitleFontSize(locale.languageCode);
         double bodyFontSize = getBodyFontSize(locale.languageCode);
@@ -245,96 +155,84 @@ class _CounterPageState extends State<CounterPage> {
           body: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               return SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: constraints.maxHeight,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(height: 10), // 上部のスペースを調整
-                      // 前に並んでいる人数(1段目)
-                      CounterFront(
-                        counterFront: counterModel.counterFront,
-                        bodyFontSize: bodyFontSize,
-                        counterNumbersSize: counterNumbersSize,
-                        iconSize: iconSize,
-                        dialogFontSize: dialogFontSize,
-                        containerBackgroundColor: containerBackgroundColor,
-                        buttonColor: buttonColor,
-                        counterFrontController:
-                            counterModel.counterFrontController,
-                        updateCounterFront: counterModel.updateCounterFront,
-                        resetCounterFront: counterModel.resetFront,
-                        decrementCounterFront: counterModel.decrementFront,
-                        incrementCounterFront: counterModel.incrementFront,
-                      ),
-                      SizedBox(height: 12),
-                      // 後ろに並んだ人数(2段目)
-                      CounterBehind(
-                        counterBehind: counterModel.counterBehind,
-                        bodyFontSize: bodyFontSize,
-                        counterNumbersSize: counterNumbersSize,
-                        iconSize: iconSize,
-                        dialogFontSize: dialogFontSize,
-                        containerBackgroundColor: containerBackgroundColor,
-                        buttonColor: buttonColor,
-                        counterBehindController:
-                            counterModel.counterBehindController,
-                        updateCounterBehind: counterModel.updateCounterBehind,
-                        resetCounterBehind: counterModel.resetBehind,
-                        decrementCounterBehind: counterModel.decrementBehind,
-                        incrementCounterBehind: counterModel.incrementBehind,
-                      ),
-                      SizedBox(height: 12),
-                      // タイマー&計算ボタン(3段目)
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            //タイマー部分
-                            TimerWidget(
-                              timer: _timer,
-                              countdownTimer: _countdownTimer,
-                              bodyFontSize: bodyFontSize,
-                              timerNumbersSize: timerNumbersSize,
-                              iconSize: iconSize,
-                              containerBackgroundColor:
-                                  containerBackgroundColor,
-                              toggleTimer: _toggleTimer,
-                              resetTimer: () {
-                                _countdownTimer?.cancel();
-                                setState(() {
-                                  _timer = defaultTimerSeconds;
-                                  _countdownTimer = null;
-                                });
-                              },
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: 10), // 上部のスペースを調整
+                    // 前に並んでいる人数(1段目)
+                    CounterFront(
+                      counterFront: counterModel.counterFront,
+                      bodyFontSize: bodyFontSize,
+                      counterNumbersSize: counterNumbersSize,
+                      iconSize: iconSize,
+                      dialogFontSize: dialogFontSize,
+                      containerBackgroundColor: containerBackgroundColor,
+                      buttonColor: buttonColor,
+                      counterFrontController:
+                          counterModel.counterFrontController,
+                      updateCounterFront: counterModel.updateCounterFront,
+                      resetCounterFront: counterModel.resetFront,
+                      decrementCounterFront: counterModel.decrementFront,
+                      incrementCounterFront: counterModel.incrementFront,
+                    ),
+                    SizedBox(height: 12),
+                    // 後ろに並んだ人数(2段目)
+                    CounterBehind(
+                      counterBehind: counterModel.counterBehind,
+                      bodyFontSize: bodyFontSize,
+                      counterNumbersSize: counterNumbersSize,
+                      iconSize: iconSize,
+                      dialogFontSize: dialogFontSize,
+                      containerBackgroundColor: containerBackgroundColor,
+                      buttonColor: buttonColor,
+                      counterBehindController:
+                          counterModel.counterBehindController,
+                      updateCounterBehind: counterModel.updateCounterBehind,
+                      resetCounterBehind: counterModel.resetBehind,
+                      decrementCounterBehind: counterModel.decrementBehind,
+                      incrementCounterBehind: counterModel.incrementBehind,
+                    ),
+                    SizedBox(height: 12),
+                    // タイマー&計算ボタン(3段目)
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TimerWidget(
+                            timer: timerModel.timer,
+                            countdownTimer: timerModel.countdownTimer,
+                            bodyFontSize: bodyFontSize,
+                            timerNumbersSize: timerNumbersSize,
+                            iconSize: iconSize,
+                            containerBackgroundColor: containerBackgroundColor,
+                            toggleTimer: () => timerModel.toggleTimer(
+                              context,
+                              settingModel.soundEnabled,
                             ),
-                            SizedBox(width: 0),
-                            // 計算ボタンの部分
-                            CalculateButton(
-                              bodyFontSize: bodyFontSize,
-                              iconSize: iconSize,
-                              containerBackgroundColor:
-                                  containerBackgroundColor,
-                              counterFront: counterModel.counterFront,
-                              counterBehind: counterModel.counterBehind,
-                            ),
-                          ],
-                        ),
+                            resetTimer: timerModel.resetTimer,
+                          ),
+                          SizedBox(width: 0),
+                          // 計算ボタンの部分
+                          CalculateButton(
+                            bodyFontSize: bodyFontSize,
+                            iconSize: iconSize,
+                            containerBackgroundColor: containerBackgroundColor,
+                            counterFront: counterModel.counterFront,
+                            counterBehind: counterModel.counterBehind,
+                          ),
+                        ],
                       ),
-                      // バナー部分
-                      SizedBox(height: 24),
-                      Container(
-                        width: AdSize.fullBanner.width.toDouble(),
-                        height: AdSize.fullBanner.height.toDouble(),
-                        alignment: Alignment.center,
-                        child: AdWidget(ad: myBanner),
-                      ),
-                      const SafeArea(child: SizedBox.shrink()),
-                    ],
-                  ),
+                    ),
+                    // バナー部分
+                    SizedBox(height: 24),
+                    Container(
+                      width: AdSize.fullBanner.width.toDouble(),
+                      height: AdSize.fullBanner.height.toDouble(),
+                      alignment: Alignment.center,
+                      child: AdWidget(ad: myBanner),
+                    ),
+                    const SafeArea(child: SizedBox.shrink()),
+                  ],
                 ),
               );
             },
@@ -361,6 +259,7 @@ void main() async {
         providers: [
           ChangeNotifierProvider<SettingModel>(create: (_) => settingModel),
           ChangeNotifierProvider<CounterModel>(create: (_) => CounterModel()),
+          ChangeNotifierProvider<TimerModel>(create: (_) => TimerModel()),
         ],
         child: Consumer<SettingModel>(
           builder: (context, model, child) {

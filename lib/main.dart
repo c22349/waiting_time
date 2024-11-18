@@ -1,7 +1,3 @@
-// import 'dart:async';
-// import 'package:audio_session/audio_session.dart';
-// import 'package:audioplayers/audioplayers.dart';
-// import 'package:auto_size_text/auto_size_text.dart'; // 使用していない可能性あり
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,9 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-// 使用していない可能性あり(Android側未検証)
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:vibration/vibration.dart';
 
 // 読み込みファイル
 import 'const.dart';
@@ -29,6 +22,11 @@ import 'viewmodel/setting_model.dart';
 import 'viewmodel/timer_model.dart';
 
 // 使用していない可能性あり(Android側未検証)
+// import 'dart:async';
+// import 'package:audio_session/audio_session.dart';
+// import 'package:audioplayers/audioplayers.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:vibration/vibration.dart';
 // Future<Locale> loadLocale() async {
 //   final prefs = await SharedPreferences.getInstance();
 //   final languageCode = prefs.getString('language') ?? 'ja';

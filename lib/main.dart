@@ -20,6 +20,7 @@ import 'view/update_prompt_dialog.dart';
 import 'viewmodel/counter_model.dart';
 import 'viewmodel/setting_model.dart';
 import 'viewmodel/timer_model.dart';
+import 'viewmodel/app_config_model.dart';
 
 // 使用していない可能性あり(Android側未検証)
 // import 'dart:async';
@@ -43,46 +44,31 @@ class MyApp extends StatelessWidget {
     return Consumer<SettingModel>(
       builder: (context, settings, child) {
         return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          locale: settings.currentLocale, // 現在のローカル
-          localizationsDelegates: [
+          locale: settings.currentLocale,
+          localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [
-            const Locale('en', ''),
-            const Locale('ja', ''),
+          supportedLocales: const [
+            Locale('ja', ''),
+            Locale('en', ''),
           ],
-          localeResolutionCallback: (deviceLocale, supportedLocales) {
-            if (deviceLocale != null &&
-                supportedLocales.contains(deviceLocale)) {
-              return deviceLocale;
-            }
-            return Locale('en', '');
-          },
-          theme: ThemeData(
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-            scaffoldBackgroundColor: backgroundColor,
-            appBarTheme: AppBarTheme(
-              color: backgroundColor,
-            ),
-          ),
           home: FutureBuilder<bool>(
             future: VersionCheckService().versionCheck(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 // ネット未接続の場合スキップ
-                return CounterPage();
+                return const CounterPage();
               } else if (snapshot.data == true) {
                 // アップデートが必要な場合の画面を表示
-                return UpdatePromptDialog();
+                return const UpdatePromptDialog();
               }
               // 通常のホーム画面を表示
-              return CounterPage();
+              return const CounterPage();
             },
           ),
         );
@@ -99,30 +85,6 @@ class CounterPage extends StatefulWidget {
 }
 
 class _CounterPageState extends State<CounterPage> {
-  late BannerAd myBanner;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _initBannerAd();
-  }
-
-  void _initBannerAd() {
-    final AdSize adSize = _getAdSize();
-    myBanner = BannerAd(
-      adUnitId: getAdBannerUnitId(),
-      size: adSize,
-      request: const AdRequest(),
-      listener: const BannerAdListener(),
-    );
-    myBanner.load();
-  }
-
-  AdSize _getAdSize() {
-    final width = MediaQuery.of(context).size.width.toInt();
-    return AdSize(width: width, height: 60);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer3<CounterModel, TimerModel, SettingModel>(
@@ -133,7 +95,9 @@ class _CounterPageState extends State<CounterPage> {
         double dialogFontSize = getDialogFontSize(locale.languageCode);
 
         return Scaffold(
+          backgroundColor: backgroundColor, // コンテンツの背景色
           appBar: AppBar(
+            backgroundColor: backgroundColor, // タイトルバーの背景色
             title: Text(
               AppLocalizations.of(context)!.main_title,
               style: TextStyle(fontSize: titleFontSize),
@@ -223,12 +187,7 @@ class _CounterPageState extends State<CounterPage> {
                     ),
                     // バナー部分
                     SizedBox(height: 24),
-                    Container(
-                      width: AdSize.fullBanner.width.toDouble(),
-                      height: AdSize.fullBanner.height.toDouble(),
-                      alignment: Alignment.center,
-                      child: AdWidget(ad: myBanner),
-                    ),
+                    const AdBannerWidget(),
                     const SafeArea(child: SizedBox.shrink()),
                   ],
                 ),

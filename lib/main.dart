@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 // 読み込みファイル
@@ -20,7 +19,6 @@ import 'view/update_prompt_dialog.dart';
 import 'viewmodel/counter_model.dart';
 import 'viewmodel/setting_model.dart';
 import 'viewmodel/timer_model.dart';
-import 'viewmodel/app_config_model.dart';
 
 // 使用していない可能性あり(Android側未検証)
 // import 'dart:async';

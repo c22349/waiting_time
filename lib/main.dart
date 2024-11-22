@@ -32,6 +32,7 @@ import 'viewmodel/timer_model.dart';
 //   return Locale(languageCode, '');
 // }
 
+// アプリ起動時
 class MyApp extends StatelessWidget {
   MyApp({required this.locale});
 

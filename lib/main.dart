@@ -65,6 +65,9 @@ class MyApp extends StatelessWidget {
               } else if (snapshot.data == true) {
                 // アップデートが必要な場合の画面を表示
                 return const UpdatePromptDialog();
+              } else {
+                // 説明画面を表示
+                return const IntroductionPage();
               }
               // 通常のホーム画面を表示
               return const CounterPage();
@@ -195,6 +198,52 @@ class _CounterPageState extends State<CounterPage> {
           ),
         );
       },
+    );
+  }
+}
+
+// アプリの使い方
+class IntroductionPage extends StatelessWidget {
+  const IntroductionPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'アプリの使い方',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                'このアプリでは、列に並んでいる人数を簡単にカウントできます。\n'
+                '前列と後列の人数を別々に管理することができます。',
+                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CounterPage()),
+                );
+              },
+              child: const Text('始める'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

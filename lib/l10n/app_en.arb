@@ -87,5 +87,17 @@
   "later": "Later",
   "@later": {
     "description": "Later button"
+      },
+  "app_introduction_title": "How to use this app",
+      "@app_introduction_title": {
+        "description": "Introduction page title"
+      },
+  "app_introduction_description": "With this app, you can easily count the number of people in line.\nYou can manage the number of people in front and behind separately.",
+      "@app_introduction_description": {
+        "description": "Introduction page description"
+      },
+  "start_button": "Start",
+      "@start_button": {
+        "description": "Start button text"
       }
 }

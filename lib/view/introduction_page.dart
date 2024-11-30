@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../const.dart';
 import '../main.dart';
 
@@ -24,8 +25,8 @@ class IntroductionPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'アプリの使い方',
+                  Text(
+                    AppLocalizations.of(context)!.app_introduction_title,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -34,10 +35,9 @@ class IntroductionPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'このアプリでは、列に並んでいる人数を簡単にカウントできます。\n'
-                    '前列と後列の人数を別々に管理することができます。',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.app_introduction_description,
+                    style: const TextStyle(
                       fontSize: 16,
                       color: Colors.black,
                       decoration: TextDecoration.none,
@@ -57,7 +57,7 @@ class IntroductionPage extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text('始める'),
+                    child: Text(AppLocalizations.of(context)!.start_button),
                   ),
                 ],
               ),

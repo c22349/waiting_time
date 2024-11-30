@@ -21,5 +21,8 @@
   "sound_settings": "アラーム音",
   "update_message": "新しいバージョンが出ました。\n\n最新版のアップデートをお願いいたします。",
   "update": "今すぐ更新",
-  "later": "あとで"
+  "later": "あとで",
+  "app_introduction_title": "アプリの使い方",
+  "app_introduction_description": "このアプリでは、列に並んでいる人数を簡単にカウントできます。\n前列と後列の人数を別々に管理することができます。",
+  "start_button": "始める"
 }

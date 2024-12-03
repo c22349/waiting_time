@@ -92,7 +92,7 @@
       "@app_introduction_title": {
         "description": "Introduction page title"
       },
-  "app_introduction_description": "With this app, you can easily count the number of people in line.\nYou can manage the number of people in front and behind separately.",
+  "app_introduction_description": "Use Little's Law to predict the wait time.\nCount the number of people in the front row to begin with, and count the number of people in the back row after one minute.",
       "@app_introduction_description": {
         "description": "Introduction page description"
       },

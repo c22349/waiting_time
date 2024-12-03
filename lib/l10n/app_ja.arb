@@ -23,6 +23,6 @@
   "update": "今すぐ更新",
   "later": "あとで",
   "app_introduction_title": "アプリの使い方",
-  "app_introduction_description": "このアプリでは、列に並んでいる人数を簡単にカウントできます。\n前列と後列の人数を別々に管理することができます。",
+  "app_introduction_description": "リトルの法則を使って待ち時間を予想します。\n始めに前列に並んでいる人数をカウントして、1分間後に後列に並んだ人数をカウントしてください。",
   "start_button": "始める"
 }

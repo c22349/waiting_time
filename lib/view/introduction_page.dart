@@ -12,11 +12,11 @@ class IntroductionPage extends StatelessWidget {
       children: [
         const CounterPage(), // 背景としてメイン画面を表示
         Container(
-          color: Colors.black54,
+          color: overlayBackgroundColor,
           child: Center(
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.8,
+              width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.85,
               decoration: BoxDecoration(
                 color: backgroundColor,
                 borderRadius: BorderRadius.circular(16),
@@ -30,7 +30,7 @@ class IntroductionPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: textColor,
                       decoration: TextDecoration.none,
                     ),
                   ),
@@ -39,7 +39,7 @@ class IntroductionPage extends StatelessWidget {
                     AppLocalizations.of(context)!.app_introduction_description,
                     style: const TextStyle(
                       fontSize: 16,
-                      color: Colors.black,
+                      color: textColor,
                       decoration: TextDecoration.none,
                     ),
                     textAlign: TextAlign.center,

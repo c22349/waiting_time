@@ -36,7 +36,6 @@ import 'viewmodel/timer_model.dart';
 // アプリ起動時
 class MyApp extends StatelessWidget {
   MyApp({required this.locale});
-
   final Locale locale;
 
   @override

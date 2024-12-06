@@ -15,8 +15,8 @@ class IntroductionPage extends StatelessWidget {
           color: overlayBackgroundColor,
           child: Center(
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.85,
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: MediaQuery.of(context).size.height * 0.9,
               decoration: BoxDecoration(
                 color: backgroundColor,
                 borderRadius: BorderRadius.circular(16),

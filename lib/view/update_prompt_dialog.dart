@@ -1,9 +1,9 @@
 import 'dart:io';
-import '../main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../main.dart';
 
 const APP_STORE_URL = 'https://apps.apple.com/jp/app/id6503664751?mt=8';
 const PLAY_STORE_URL =

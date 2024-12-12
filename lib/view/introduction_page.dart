@@ -25,6 +25,12 @@ class IntroductionPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Icon(
+                    Icons.person_outline,
+                    size: 64,
+                    color: textColor,
+                  ),
+                  const SizedBox(height: 20),
                   Text(
                     AppLocalizations.of(context)!.app_introduction_title,
                     style: TextStyle(

@@ -1,0 +1,2 @@
+/Users/shtk/AndroidStudioProjects/waiting_time/android/app/.cxx/RelWithDebInfo/1x5j4h2u/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/shtk/AndroidStudioProjects/waiting_time/android/app/.cxx/RelWithDebInfo/1x5j4h2u/arm64-v8a/CMakeFiles/rebuild_cache.dir

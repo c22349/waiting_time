@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audio_session/audio_session.dart';
-import 'package:vibration/vibration.dart';
+
 import '../const.dart';
 
 class TimerModel extends ChangeNotifier {
@@ -37,7 +37,7 @@ class TimerModel extends ChangeNotifier {
         if (soundEnabled) {
           _playAlarm();
         }
-        _startRepeatedVibration();
+        // _startRepeatedVibration(); // 振動機能を一時的に無効化
       }
     });
     notifyListeners();
@@ -66,16 +66,17 @@ class TimerModel extends ChangeNotifier {
     });
   }
 
-  void _startRepeatedVibration() {
-    Vibration.vibrate(duration: 250);
-    Timer.periodic(const Duration(seconds: 1), (Timer vibrationOrder) {
-      if (vibrationOrder.tick < 2) {
-        Vibration.vibrate(duration: 250);
-      } else {
-        vibrationOrder.cancel();
-      }
-    });
-  }
+  // 振動機能を一時的に無効化
+  // void _startRepeatedVibration() {
+  //   FlutterVibrate.vibrate();
+  //   Timer.periodic(const Duration(seconds: 1), (Timer vibrationOrder) {
+  //     if (vibrationOrder.tick < 2) {
+  //       FlutterVibrate.vibrate();
+  //     } else {
+  //       vibrationOrder.cancel();
+  //     }
+  //   });
+  // }
 
   @override
   void dispose() {

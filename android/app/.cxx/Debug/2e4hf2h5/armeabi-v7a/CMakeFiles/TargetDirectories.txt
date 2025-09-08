@@ -1,0 +1,2 @@
+/Users/shtk/AndroidStudioProjects/waiting_time/android/app/.cxx/Debug/2e4hf2h5/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/shtk/AndroidStudioProjects/waiting_time/android/app/.cxx/Debug/2e4hf2h5/armeabi-v7a/CMakeFiles/rebuild_cache.dir

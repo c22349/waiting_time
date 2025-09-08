@@ -1,6 +1,6 @@
 import 'dart:io' show Platform;
 import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 class VersionCheckService {

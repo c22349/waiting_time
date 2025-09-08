@@ -1,0 +1,1 @@
+/Users/shtk/AndroidStudioProjects/waiting_time/build/app/intermediates/cxx/Debug/2e4hf2h5/obj/arm64-v8a

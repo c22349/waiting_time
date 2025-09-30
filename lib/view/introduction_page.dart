@@ -57,11 +57,11 @@ class _IntroductionPageState extends State<IntroductionPage>
                           sin(_controller.value * 2 * pi) * 2,
                           0,
                         ),
-                        child: Icon(
-                          Icons.person_outline,
-                          size: 64,
-                          color: textColor,
-                        ),
+                        // child: Icon(
+                        //   Icons.person_outline,
+                        //   size: 64,
+                        //   color: textColor,
+                        // ),
                       );
                     },
                   ),

@@ -32,6 +32,7 @@ import 'viewmodel/timer_model.dart';
 //   final languageCode = prefs.getString('language') ?? 'ja';
 //   return Locale(languageCode, '');
 // }
+//
 
 // アプリ起動時
 class MyApp extends StatelessWidget {

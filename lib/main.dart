@@ -22,17 +22,17 @@ import 'viewmodel/setting_model.dart';
 import 'viewmodel/timer_model.dart';
 
 // 使用していない可能性あり(Android側未検証)
-// import 'dart:async';
-// import 'package:audio_session/audio_session.dart';
-// import 'package:audioplayers/audioplayers.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:vibration/vibration.dart';
-// Future<Locale> loadLocale() async {
-//   final prefs = await SharedPreferences.getInstance();
-//   final languageCode = prefs.getString('language') ?? 'ja';
-//   return Locale(languageCode, '');
-// }
-//
+import 'dart:async';
+import 'package:audio_session/audio_session.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vibration/vibration.dart';
+
+Future<Locale> loadLocale() async {
+  final prefs = await SharedPreferences.getInstance();
+  final languageCode = prefs.getString('language') ?? 'ja';
+  return Locale(languageCode, '');
+}
 
 // アプリ起動時
 class MyApp extends StatelessWidget {

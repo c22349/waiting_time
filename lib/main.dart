@@ -20,12 +20,12 @@ import 'view/update_prompt_dialog.dart';
 import 'viewmodel/counter_model.dart';
 import 'viewmodel/setting_model.dart';
 import 'viewmodel/timer_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // 使用していない可能性あり(Android側未検証)
 // import 'dart:async';
 // import 'package:audio_session/audio_session.dart';
 // import 'package:audioplayers/audioplayers.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:vibration/vibration.dart';
 
 Future<Locale> loadLocale() async {

@@ -9,7 +9,7 @@ String getAdBannerUnitId() {
     // Androidの場合
     bannerUnitId = kDebugMode
         ? "ca-app-pub-3940256099942544/6300978111" // Androidのデモ用バナー広告ID
-        : "ca-app-pub-6406325278701298/2538907813";
+        : "ca-app-pub-6406325278701298/2347468838";
   } else if (Platform.isIOS) {
     // iOSの場合
     bannerUnitId = kDebugMode

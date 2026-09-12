@@ -7,7 +7,7 @@ import '../main.dart';
 
 const APP_STORE_URL = 'https://apps.apple.com/jp/app/id6503664751?mt=8';
 const PLAY_STORE_URL =
-    'https://play.google.com/store/apps/details?id=com.queue_time';
+    'https://play.google.com/store/apps/details?id=com.queue_time.app';
 
 // 指定のURLを起動 App Store or Play Storeのリンク
 void _launchURL(String url) async {

@@ -41,7 +41,7 @@ class CalculateButton extends StatelessWidget {
           ),
           SizedBox(height: 32),
           IconButton(
-            icon: Icon(
+            icon: FaIcon(
               FontAwesomeIcons.calculator,
               size: iconSize * 1.6,
             ),

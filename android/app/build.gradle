@@ -3,6 +3,7 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
 }
 
 def keystoreProperties = new Properties()
@@ -26,23 +27,27 @@ if (localPropertiesFile.exists()) {
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-    flutterVersionCode = '8'
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
-    flutterVersionName = '1.1.0'
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
 
 android {
     namespace "com.queue_time"
-    compileSdk 35
+    compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -55,7 +60,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk flutter.minSdkVersion
-        targetSdk 35
+        targetSdk flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -79,5 +84,3 @@ android {
 flutter {
     source '../..'
 }
-
-apply plugin: 'com.google.gms.google-services'
